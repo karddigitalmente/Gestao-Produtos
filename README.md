@@ -8,7 +8,7 @@ Projeto para aprofundar conhecimentos em OOP e Persistência de dados em Java.
   - nome_usuario
   - email
   - cpf
-  - senha
+  - senha (min 8 digitos, letra e numero)
 
 - Administrador.
 - - CRUD Produtos.
