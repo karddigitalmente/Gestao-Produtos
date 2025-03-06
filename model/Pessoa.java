@@ -1,5 +1,6 @@
 package model;
 
+// Classe abstrata para não ser instanciada e somente herdada
 public abstract class Pessoa {
 	
 	private long id;
@@ -35,10 +36,12 @@ public abstract class Pessoa {
 
 	public boolean setCpf(String cpf) {
 		
+		// cpf tem 11 caracteres
 		if(cpf.toCharArray().length < 11) {
 			return false;
 		}
 		
+		// transforma ele de 00000000000 para 000.000.000-00
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(cpf);
@@ -57,6 +60,7 @@ public abstract class Pessoa {
 
 	public boolean setSenha(String senha) {
 		
+		// senha tem que ter no min 8 chars
 		if(senha.toCharArray().length < 8) {
 			return false;
 		}
