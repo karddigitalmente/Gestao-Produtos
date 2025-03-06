@@ -3,11 +3,18 @@ Projeto para aprofundar conhecimentos em OOP e Persistência de dados em Java.
 
 ## Requisitos:
 ### Pessoa
-- Admin.
+- Atributos
+- - id
+  - nome_usuario
+  - email
+  - cpf
+  - senha
+
+- Administrador.
 - - CRUD Produtos.
   - CRUD Pessoas.
 
-- Pessoa.
+- Usuario.
 - - Vendas em Produtos.
 
 ### Produtos
