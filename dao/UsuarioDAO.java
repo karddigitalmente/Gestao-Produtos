@@ -5,36 +5,38 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import model.entity.Administrador;
+import model.entity.Turno;
 import model.entity.Usuario;
 import util.ConexaoBanco;
 
-public class AdministradorDAO {
-	
-	public static void salvar(Administrador adm) {
-		String query = "INSERT INTO Administrador(id, nome, cpf, senha) VALUES(?, ?, ?, ?)";
+public class UsuarioDAO {
+
+	public static void salvar(Usuario user) {
+		String query = "INSERT INTO Usuario(id, nome, cpf, senha, turno) VALUES(?, ?, ?, ?, ?)";
 		
 		// Executar a query
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
 			
-			statement.setString(1, Long.toString(adm.getId()));
-			statement.setString(2, adm.getNome());
-			statement.setString(3, adm.getCpf());
-			statement.setString(4, adm.getSenha());;
+			statement.setString(1, Long.toString(user.getId()));
+			statement.setString(2, user.getNome());
+			statement.setString(3, user.getCpf());
+			statement.setString(4, user.getSenha());
+			statement.setString(5, user.getTurno().toString());
 			
 			statement.executeUpdate();
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao salvar o administrador: " + e.getMessage());
+			throw new RuntimeException("Erro ao salvar o usuário: " + e.getMessage());
 		}
 		
 	}
 	
 	public static void pegar(long id) {
-		String query = "SELECT * FROM Administrador WHERE id=?";
-		Administrador administrador;
+		String query = "SELECT * FROM Usuario WHERE id=?";
+		Usuario usuario;
 		String nome, cpf, senha;
+		Turno turno;
 		
 		// Executar a query
 		try(Connection conn = ConexaoBanco.getConnection();
@@ -48,16 +50,17 @@ public class AdministradorDAO {
 				nome = result.getString("nome");
 				cpf = result.getString("cpf");
 				senha = result.getString("senha");
+				turno = Turno.valueOf(result.getString("turno"));
 				
-				administrador = new Administrador(id, nome, cpf, senha);
-				
-				System.out.println(administrador);
+				usuario = new Usuario(id, nome, cpf, senha, turno);
+					
+				System.out.println(usuario);
+			} else {
+				System.out.println("Usuário Não encontrado!");
 			}
 			
-			System.out.println("Não foi encontrado administrador com este id!!");
-			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao salvar o administrador: " + e.getMessage());
+			throw new RuntimeException("Erro ao salvar o usuário: " + e.getMessage());
 		}
 		
 	}
