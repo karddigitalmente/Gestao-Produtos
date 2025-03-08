@@ -1,9 +1,0 @@
-pra usar o jdbc e se conectar ao banco de dados, vc precisa "instalar" o driver que veio junto aqui
-
-No eclipse:
-1° clica com o botão direito no projeto e vai em properties
-2° vai em Java Build Path, e na tela q abrir vc vai em libraries
-3° clica em ClassPath e vai em Add Jar's, ai na tela q abrir vc seleciona o driver e dps da apply
-
-No IntelliJ
-1° Chora :)
