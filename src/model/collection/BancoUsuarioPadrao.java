@@ -1,11 +1,15 @@
 package model.collection;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.UsuarioDAO;
 import model.entity.Administrador;
 import model.entity.AdministradorCargo;
 import model.entity.Usuario;
+import util.ConexaoBanco;
 
 public class BancoUsuarioPadrao {
 	
@@ -36,6 +40,28 @@ public class BancoUsuarioPadrao {
 		
 	}
 	
+	public static void remover(long id) {
+		String query = "DELETE FROM Usuario WHERE id=?";
+		
+		// Executar a query
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			
+			statement.setLong(1, id);
+			
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas == 0) {
+				System.out.println("Não foi encontrado usuário com este id!!");
+			} else {
+				System.out.println("Usuário Removido com Sucesso!");
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Erro ao salvar o usuário: " + e.getMessage());
+		}
+	}
+	
 	public int getQuantidade() {
 		return quantidade;
 	}
@@ -46,6 +72,10 @@ public class BancoUsuarioPadrao {
 	
 	public void setUsuarios(ArrayList<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+	
+	public void listar() {
+		System.out.println(toString());
 	}
 	
 	@Override
