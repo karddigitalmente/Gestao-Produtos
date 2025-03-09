@@ -14,22 +14,29 @@ public class BancoProdutosDAO {
 
 	public static void salvar(Produto produto) {
 		// comando pro SQL
-		String query = "insert into Produto (id, nome, descricao, quantidade, valor) values (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Produto (id, nome, descricao, quantidade, valor) values (?, ?, ?, ?, ?)";
 		
 		// executa a query
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
 			
 			// substitui o "?"
-			statement.setString(1, Long.toString(produto.getId()));
+			statement.setLong(1, produto.getId());
 			statement.setString(2, produto.getNome());
 			statement.setString(3, produto.getDescricao());
-			statement.setString(4, Integer.toString(produto.getQuantidade()));
-			statement.setString(5, Double.toString(produto.getValorProduto()));
+			statement.setInt(4, produto.getQuantidade());
+			statement.setDouble(5, produto.getValorProduto());
 			
-			statement.executeUpdate();
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas > 0) {
+				System.out.println("Produto adicionado com sucesso!");
+			} else {
+				System.out.println("Produto não adicionado!");
+			}
+			
 		} catch(SQLException e) {
-			throw new RuntimeException("Erro ao salvar o produto: " + e.getMessage());
+			System.err.println("Erro ao salvar o produto: " + e.getMessage());
 		}
 	}
 	
@@ -62,6 +69,28 @@ public class BancoProdutosDAO {
 			System.out.println("Não foi encontrado um produto com esse id!");
 		} catch (SQLException e) {
 			throw new RuntimeException("Erro ao buscar o produto: " + e.getMessage());
+		}
+	}
+	
+	public static void remover(long id) {
+		String query = "DELETE FROM Produto WHERE id=?";
+		
+		// Executar a query
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			
+			statement.setString(1, Long.toString(id));
+			
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas == 0) {
+				System.out.println("Não foi encontrado produto com este id!!");
+			} else {
+				System.out.println("Administrador Removido com Sucesso!");
+			}
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("Erro ao salvar o produto: " + e.getMessage());
 		}
 	}
 
