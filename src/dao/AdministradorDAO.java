@@ -26,9 +26,11 @@ public class AdministradorDAO {
 			statement.setString(4, adm.getSenha());
 			statement.setString(5, adm.getCargo().toString());
 			
-			System.out.println(adm.getCargo().toString());
+			int linhaAfetada = statement.executeUpdate();
 			
-			statement.executeUpdate();
+			if(linhaAfetada > 0){
+				System.out.println("Administrador Salvo com sucesso!");
+			}
 			
 		} catch (SQLException e) {
 			System.err.println("Erro ao salvar o administrador: " + e.getMessage());
@@ -93,7 +95,7 @@ public class AdministradorDAO {
 	
 	public static void editar(AdministradorAtributos atributo, String valor, long id) {
 		
-		String query = "UPDATE Administrador SET " + atributo + " = " + valor + " WHERE  id " + "= ?;";
+		String query = "UPDATE Administrador SET " + atributo + " = " + valor + " WHERE  id " + "= ?";
 		
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
@@ -146,7 +148,7 @@ public class AdministradorDAO {
 	public static ArrayList<Administrador> carregar() {
  		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
  		
- 		String sql = "SELECT * FROM Administrador;";
+ 		String sql = "SELECT * FROM Administrador";
  		
  		try(Connection conn = ConexaoBanco.getConnection();
  			PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -167,9 +169,8 @@ public class AdministradorDAO {
  				administradores.add(new Administrador(id, nome, cpf, senha, cargo));
  			}
  			
- 			
  		} catch(SQLException e) {
- 			System.err.println(e.getStackTrace());
+ 			System.err.println(e.getMessage());
  		}
  		
  		return administradores;
