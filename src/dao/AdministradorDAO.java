@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.entity.Administrador;
 import model.entity.AdministradorAtributos;
@@ -141,4 +142,38 @@ public class AdministradorDAO {
 			System.err.println("Erro ao salvar o administrador: " + e.getMessage());
 		}	
 	}
+	
+	public static ArrayList<Administrador> carregar() {
+ 		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
+ 		
+ 		String sql = "SELECT * FROM Administrador;";
+ 		
+ 		try(Connection conn = ConexaoBanco.getConnection();
+ 			PreparedStatement statement = conn.prepareStatement(sql)) {
+ 			long id;
+ 			String nome, cpf, senha;
+ 			AdministradorCargo cargo;
+ 			
+ 			ResultSet set = statement.executeQuery();
+ 			
+ 			while(set.next()) {
+ 				
+ 				id = set.getLong("id");
+ 				nome = set.getString("nome");
+ 				cpf = set.getString("cpf");
+ 				senha = set.getString("senha");
+ 				cargo = AdministradorCargo.valueOf(set.getString("cargo"));
+ 				
+ 				administradores.add(new Administrador(id, nome, cpf, senha, cargo));
+ 			}
+ 			
+ 			
+ 		} catch(SQLException e) {
+ 			System.err.println(e.getStackTrace());
+ 		}
+ 		
+ 		return administradores;
+ 		
+ 	}
+ 	
 }
