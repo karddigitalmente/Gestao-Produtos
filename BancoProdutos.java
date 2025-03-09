@@ -1,6 +1,7 @@
 package model.colletction;
 
 import java.util.ArrayList;
+
 import model.entity.Produto;
 import model.entity.Administrador;
 
@@ -98,6 +99,28 @@ public class BancoProdutos {
 	
 	public void listar() {
 		System.out.println(this.toString());
+	}
+	
+	public boolean vendaProduto(long idProduto, double valorProduto, long idUsuario) {
+		BancoUsuarioPadrao bancoUsuario = new BancoUsuarioPadrao();
+		
+		for(Produto produto:produtos) {
+			if(produto.getId() == idProduto && produto.getQuantidade() > 0) {
+				produto.setQuantidade(produto.getQuantidade() - 1);
+				
+				if(produto.getQuantidade == 0) {
+					System.out.println("O estoque do: " + produto.getNome() + " está 0.");
+				}
+				
+				if(bancoUsuario.comissao(idUsuario, valorProduto) && bancoUsuario.vendaQuantidade(idUsuario)) {
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		return false;
 	}
 	
 }
