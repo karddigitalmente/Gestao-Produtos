@@ -17,8 +17,6 @@ public class BancoAdministrador {
 	
 	public BancoAdministrador() {
 		quantidade = 0;
-		
-		// Preencher o array
 		administradores = carregar();
 	}
 	
@@ -39,8 +37,7 @@ public class BancoAdministrador {
 	
 	public boolean remover(Administrador administrador, Object user) {
 		if(checarPermissao(user)) {
-			if(administradores.contains(administrador)) {
-				administradores.remove(administrador);
+			if(administradores.remove(administrador)) {
 				AdministradorDAO.remover(administrador.getId());
 				
 				quantidade --;
@@ -49,6 +46,7 @@ public class BancoAdministrador {
 			}
 		}
 		
+		System.out.println("Erro remover");
 		return false;
 	}
 	
@@ -58,18 +56,18 @@ public class BancoAdministrador {
 				
 				switch(atributo) {
 				
-				case AdministradorAtributos.nome:
+				case nome:
 					administrador.setNome((String) valor);
 					break;
-				case AdministradorAtributos.cpf:
+				case cpf:
 					administrador.setCpf((String) valor);
 					break;
 				
-				case AdministradorAtributos.senha:
+				case senha:
 					administrador.setSenha((String) valor);
 					break;
 				
-				case AdministradorAtributos.cargo:
+				case cargo:
 					administrador.setCargo((AdministradorCargo) valor);
 					break;
 				
@@ -95,18 +93,10 @@ public class BancoAdministrador {
 	public String toString() {
 		StringBuilder resultado = new StringBuilder();
 		
-		// Para não printar o newLine ao chegar no último produto
-		int count = 1;
-		
 		for(Administrador administrador : administradores) {
 			resultado.append(administrador.getId() + " " + administrador.getNome() + " " + administrador.getCpf() + " " + administrador.getSenha());
 			
-			// Comentário acima kk
-			if(count < quantidade) {
-				resultado.append("\n");
-			}
-						
-			count++;
+			resultado.append("\n");
 		}
 		
 		return resultado.toString();	
@@ -116,7 +106,7 @@ public class BancoAdministrador {
 		if(user instanceof Administrador) {
 			Administrador adm = (Administrador) user;
 			
-			if(adm.getCargo() == AdministradorCargo.GERENTE) {
+			if(adm.getCargo().equals(AdministradorCargo.GERENTE)) {
 				return true;
 			}
 			
@@ -126,13 +116,9 @@ public class BancoAdministrador {
 		return false;
 	}
 	
-	public ArrayList<Administrador> carregar() {
-		return AdministradorDAO.carregar();
-	}
-	
 	// Só pra facilitar o desenvolvimento caso esqueça que o toString tbm lista kk
 	public void listar() {
-		this.toString();
+		System.out.println(toString());
 	}
 	
 	public int getQuantidade() {
@@ -145,5 +131,9 @@ public class BancoAdministrador {
 	
 	public void setUsuarios(ArrayList<Administrador> administrador) {
 		this.administradores = administrador;
+	}
+	
+	public static ArrayList<Administrador> carregar(){
+		return AdministradorDAO.carregar();
 	}
 }

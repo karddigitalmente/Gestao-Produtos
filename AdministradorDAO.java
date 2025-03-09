@@ -26,13 +26,16 @@ public class AdministradorDAO {
 			statement.setString(4, adm.getSenha());
 			statement.setString(5, adm.getCargo().toString());
 			
-			System.out.println(adm.getCargo().toString());
+			int linhaAfetada = statement.executeUpdate();
 			
-			statement.executeUpdate();
+			if(linhaAfetada > 0){
+				System.out.println("Administrador Salvo com sucesso!");
+			}
 			
 		} catch (SQLException e) {
 			System.err.println("Erro ao salvar o administrador: " + e.getMessage());
 		}
+		
 	}
 	
 	public static void pegar(long id) {
@@ -92,7 +95,7 @@ public class AdministradorDAO {
 	
 	public static void editar(AdministradorAtributos atributo, String valor, long id) {
 		
-		String query = "UPDATE Administrador SET " + atributo + " = " + valor + " WHERE  id " + "= ?;";
+		String query = "UPDATE Administrador SET " + atributo + " = " + valor + " WHERE  id " + "= ?";
 		
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
@@ -108,39 +111,6 @@ public class AdministradorDAO {
 		} catch (SQLException e) {
 			System.err.println("Erro ao editar o administrador: " + e.getMessage());
 		}
-	}
-	
-	public static ArrayList<Administrador> carregar() {
-		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
-		
-		String sql = "SELECT * FROM Administrador;";
-		
-		try(Connection conn = ConexaoBanco.getConnection();
-			PreparedStatement statement = conn.prepareStatement(sql)) {
-			long id;
-			String nome, cpf, senha;
-			AdministradorCargo cargo;
-			
-			ResultSet set = statement.executeQuery();
-			
-			while(set.next()) {
-				
-				id = set.getLong("id");
-				nome = set.getString("nome");
-				cpf = set.getString("cpf");
-				senha = set.getString("senha");
-				cargo = AdministradorCargo.valueOf(set.getString("cargo"));
-				
-				administradores.add(new Administrador(id, nome, cpf, senha, cargo));
-			}
-			
-			
-		} catch(SQLException e) {
-			System.err.println(e.getStackTrace());
-		}
-		
-		return administradores;
-		
 	}
 	
 	public static void filtrar(AdministradorAtributos atributo, String valor) {
@@ -174,4 +144,37 @@ public class AdministradorDAO {
 			System.err.println("Erro ao salvar o administrador: " + e.getMessage());
 		}	
 	}
+	
+	public static ArrayList<Administrador> carregar() {
+ 		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
+ 		
+ 		String sql = "SELECT * FROM Administrador";
+ 		
+ 		try(Connection conn = ConexaoBanco.getConnection();
+ 			PreparedStatement statement = conn.prepareStatement(sql)) {
+ 			long id;
+ 			String nome, cpf, senha;
+ 			AdministradorCargo cargo;
+ 			
+ 			ResultSet set = statement.executeQuery();
+ 			
+ 			while(set.next()) {
+ 				
+ 				id = set.getLong("id");
+ 				nome = set.getString("nome");
+ 				cpf = set.getString("cpf");
+ 				senha = set.getString("senha");
+ 				cargo = AdministradorCargo.valueOf(set.getString("cargo"));
+ 				
+ 				administradores.add(new Administrador(id, nome, cpf, senha, cargo));
+ 			}
+ 			
+ 		} catch(SQLException e) {
+ 			System.err.println(e.getMessage());
+ 		}
+ 		
+ 		return administradores;
+ 		
+ 	}
+ 	
 }
