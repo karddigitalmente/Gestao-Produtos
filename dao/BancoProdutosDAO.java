@@ -73,7 +73,7 @@ public class BancoProdutosDAO {
 	}
 	
 	public static void remover(long id) {
-		String query = "DELETE FROM Produto WHERE id=?";
+		String query = "delete from Produto where id=?";
 		
 		// Executar a query
 		try(Connection conn = ConexaoBanco.getConnection();
@@ -84,9 +84,9 @@ public class BancoProdutosDAO {
 			int linhasAfetadas = statement.executeUpdate();
 			
 			if(linhasAfetadas == 0) {
-				System.out.println("Não foi encontrado produto com este id!!");
+				System.out.println("Não foi encontrado produto com este id!");
 			} else {
-				System.out.println("Administrador Removido com Sucesso!");
+				System.out.println("Administrador removido.");
 			}
 			
 		} catch (SQLException e) {
@@ -152,6 +152,5 @@ public class BancoProdutosDAO {
 		}
 		
 		return produtos;
-	}
-	
+	}	
 }
