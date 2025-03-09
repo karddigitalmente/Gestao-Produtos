@@ -17,7 +17,9 @@ public class BancoAdministrador {
 	
 	public BancoAdministrador() {
 		quantidade = 0;
-		administradores = new ArrayList<Administrador>();
+		
+		// Preencher o array
+		administradores = carregar();
 	}
 	
 	public boolean adicionar(Administrador administrador, Object user) {
@@ -122,6 +124,10 @@ public class BancoAdministrador {
 		}
 		
 		return false;
+	}
+	
+	public ArrayList<Administrador> carregar() {
+		return AdministradorDAO.carregar();
 	}
 	
 	// Só pra facilitar o desenvolvimento caso esqueça que o toString tbm lista kk
