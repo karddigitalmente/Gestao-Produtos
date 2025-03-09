@@ -2,6 +2,7 @@ package model.collection;
 
 import java.util.ArrayList;
 
+import dao.AdministradorDAO;
 import dao.BancoProdutosDAO;
 import model.entity.Produto;
 import model.entity.Administrador;
@@ -55,6 +56,7 @@ public class BancoProdutos {
 		if(verificarPermissao(user)) {
 			produto.setId(idAtual++);
 			produtos.add(produto);
+			BancoProdutosDAO.salvar(produto);
 			quantidade++;
 			return true;
 		}
@@ -69,6 +71,7 @@ public class BancoProdutos {
 			// verifica se o produto está no array
 			if(produtos.contains(produto)) {
 				produtos.remove(produto);
+				BancoProdutosDAO.remover(produto.getId());
 				quantidade--;
 				return true;
 			}else {
@@ -106,7 +109,7 @@ public class BancoProdutos {
 	}
 	
 	public void listar() {
-		System.out.println(this.toString());
+		System.out.println(toString());
 	}
 	
 	public boolean vendaProduto(long idProduto, double valorProduto, long idUsuario) {

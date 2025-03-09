@@ -93,18 +93,10 @@ public class BancoAdministrador {
 	public String toString() {
 		StringBuilder resultado = new StringBuilder();
 		
-		// Para não printar o newLine ao chegar no último produto
-		int count = 1;
-		
 		for(Administrador administrador : administradores) {
 			resultado.append(administrador.getId() + " " + administrador.getNome() + " " + administrador.getCpf() + " " + administrador.getSenha());
 			
-			// Comentário acima kk
-			if(count < quantidade) {
-				resultado.append("\n");
-			}
-						
-			count++;
+			resultado.append("\n");
 		}
 		
 		return resultado.toString();	
@@ -126,7 +118,7 @@ public class BancoAdministrador {
 	
 	// Só pra facilitar o desenvolvimento caso esqueça que o toString tbm lista kk
 	public void listar() {
-		toString();
+		System.out.println(toString());
 	}
 	
 	public int getQuantidade() {
