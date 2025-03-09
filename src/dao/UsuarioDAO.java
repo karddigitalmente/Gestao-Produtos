@@ -19,20 +19,26 @@ public class UsuarioDAO {
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
 			
-			statement.setString(1, Long.toString(user.getId()));
+			statement.setLong(1, user.getId());
 			statement.setString(2, user.getNome());
 			statement.setString(3, user.getCpf());
 			statement.setString(4, user.getSenha());
 			statement.setString(5, user.getTurno().toString());
-			statement.setString(6, Double.toString(user.getSalario()));
-			statement.setString(7, Double.toString(user.getComissao()));
-			statement.setString(8, Float.toString(user.getTaxaVenda()));
+			statement.setDouble(6, user.getSalario());
+			statement.setDouble(7, user.getComissao());
+			statement.setFloat(8, user.getTaxaVenda());
 		
 			
-			statement.executeUpdate();
+			int linhas = statement.executeUpdate();
+			
+			if(linhas > 0) {
+				System.out.println("Usuário adicionado com sucesso");
+			} else {
+				System.out.println("Usuário não adicionado");
+			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao salvar o usuário: " + e.getMessage());
+			System.err.println("Erro ao salvar o usuário: " + e.getMessage());
 		}
 		
 	}
@@ -71,14 +77,14 @@ public class UsuarioDAO {
 			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao salvar o usuário: " + e.getMessage());
+			System.err.println("Erro ao recuperar o usuário: " + e.getMessage());
 		}
 		
 	}
 	
 	public static ArrayList<Usuario> carregar() {
 		ArrayList<Usuario> usuarios = new ArrayList<>();
-		String query = "SELECT * FROM U;";
+		String query = "SELECT * FROM Usuario";
 		
 	try(Connection conn = ConexaoBanco.getConnection();
 		PreparedStatement statement = conn.prepareStatement(query)){
