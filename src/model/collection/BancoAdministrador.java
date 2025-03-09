@@ -37,8 +37,7 @@ public class BancoAdministrador {
 	
 	public boolean remover(Administrador administrador, Object user) {
 		if(checarPermissao(user)) {
-			if(administradores.contains(administrador)) {
-				administradores.remove(administrador);
+			if(administradores.remove(administrador)) {
 				AdministradorDAO.remover(administrador.getId());
 				
 				quantidade --;
@@ -47,6 +46,7 @@ public class BancoAdministrador {
 			}
 		}
 		
+		System.out.println("Erro remover");
 		return false;
 	}
 	
@@ -56,18 +56,18 @@ public class BancoAdministrador {
 				
 				switch(atributo) {
 				
-				case AdministradorAtributos.nome:
+				case nome:
 					administrador.setNome((String) valor);
 					break;
-				case AdministradorAtributos.cpf:
+				case cpf:
 					administrador.setCpf((String) valor);
 					break;
 				
-				case AdministradorAtributos.senha:
+				case senha:
 					administrador.setSenha((String) valor);
 					break;
 				
-				case AdministradorAtributos.cargo:
+				case cargo:
 					administrador.setCargo((AdministradorCargo) valor);
 					break;
 				
@@ -114,7 +114,7 @@ public class BancoAdministrador {
 		if(user instanceof Administrador) {
 			Administrador adm = (Administrador) user;
 			
-			if(adm.getCargo() == AdministradorCargo.GERENTE) {
+			if(adm.getCargo().equals(AdministradorCargo.GERENTE)) {
 				return true;
 			}
 			
@@ -126,7 +126,7 @@ public class BancoAdministrador {
 	
 	// Só pra facilitar o desenvolvimento caso esqueça que o toString tbm lista kk
 	public void listar() {
-		this.toString();
+		toString();
 	}
 	
 	public int getQuantidade() {
