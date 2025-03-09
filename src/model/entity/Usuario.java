@@ -13,6 +13,14 @@ public class Usuario extends Pessoa {
 		this.turno = turno;
 	}
 	
+	public Usuario(String nome, String cpf, String senha, Turno turno, double salario, double comissao, float taxaVenda) {
+		super(nome, cpf, senha);
+		this.turno = turno;
+		this.salario = salario;
+		this.comissao = comissao;
+		this.taxaVenda = taxaVenda;
+	}
+	
 	public Usuario(long id, String nome, String cpf, String senha, Turno turno, double salario, double comissao, float taxaVenda) {
 		super(id, nome, cpf, senha);
 		this.turno = turno;
