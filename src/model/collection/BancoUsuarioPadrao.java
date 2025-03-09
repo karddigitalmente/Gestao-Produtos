@@ -17,7 +17,8 @@ public class BancoUsuarioPadrao {
 	
 	public BancoUsuarioPadrao() {
 		quantidade = 0;
-		usuarios = new ArrayList<Usuario>();
+		usuarios = carregar();
+		
 	}
 	
 	public void adicionar(Usuario usuario, Object user) {
@@ -95,6 +96,10 @@ public class BancoUsuarioPadrao {
 		}
 		return false;
 		
+	}
+	
+	public static ArrayList<Usuario> carregar() {
+		return UsuarioDAO.carregar();
 	}
 	
 }

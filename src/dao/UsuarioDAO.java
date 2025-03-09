@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.entity.Turno;
 import model.entity.Usuario;
@@ -37,7 +38,7 @@ public class UsuarioDAO {
 	}
 	
 	public static void pegar(long id) {
-		String query = "SELECT * FROM Usuario WHERE id=?";
+		String query = "SELECT * FROM U;suario WHERE id=?";
 		Usuario usuario;
 		String nome, cpf, senha;
 		Turno turno;
@@ -73,6 +74,44 @@ public class UsuarioDAO {
 			throw new RuntimeException("Erro ao salvar o usuário: " + e.getMessage());
 		}
 		
+	}
+	
+	public static ArrayList<Usuario> carregar() {
+		ArrayList<Usuario> usuarios = new ArrayList<>();
+		String query = "SELECT * FROM U;";
+		
+	try(Connection conn = ConexaoBanco.getConnection();
+		PreparedStatement statement = conn.prepareStatement(query)){
+		Usuario usuario;
+		String nome, cpf, senha;
+		Turno turno;
+		double comissao;
+		double salario;
+		float taxa;
+		long id;
+		
+		ResultSet result= statement.executeQuery();
+		
+		while(result.next()) {
+			id = result.getLong("id");
+			nome = result.getString("nome");
+			cpf = result.getString("cpf");
+			senha = result.getString("senha");
+			turno = Turno.valueOf(result.getString("turno"));
+			comissao = result.getDouble("comissao");
+			salario = result.getDouble("salario");
+			taxa = result.getFloat("taxa");
+			
+			usuario = new Usuario(id, nome, cpf, senha, turno, comissao, salario, taxa);
+			usuarios.add(usuario);
+		}
+		
+		return usuarios;
+		
+		
+	}catch(SQLException e) {
+		throw new RuntimeException("Erro ao carregar usuários" + e.getMessage());
+		}
 	}
 	
 }
