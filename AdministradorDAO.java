@@ -90,6 +90,26 @@ public class AdministradorDAO {
 		}
 	}
 	
+	public static void editar(AdministradorAtributos atributo, String valor, long id) {
+		
+		String query = "UPDATE Administrador SET " + atributo + " = " + valor + " WHERE  id " + "= ?;";
+		
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			
+			statement.setLong(1,id);
+			
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas == 0) {
+				System.err.println("Não foi possível alterar os dados!");
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Erro ao editar o administrador: " + e.getMessage());
+		}
+	}
+	
 	public static void filtrar(AdministradorAtributos atributo, String valor) {
 		String query = "SELECT * FROM Administrador WHERE " + atributo + "=?";
 		long id;
@@ -118,7 +138,7 @@ public class AdministradorDAO {
 			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao salvar o administrador: " + e.getMessage());
+			System.err.println("Erro ao salvar o administrador: " + e.getMessage());
 		}	
 	}
 }
