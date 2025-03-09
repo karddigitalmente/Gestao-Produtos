@@ -37,7 +37,7 @@ public class BancoProdutos {
 		int count = 1;
 		
 		for(Produto produto:produtos) {
-			resultado.append(produto.getId() + " | " + produto.getNome() + " | " + produto.getDescricao() + " | " + produto.getQuantidade());
+			resultado.append(produto.getId() + " | " + produto.getNome() + " | " + produto.getDescricao() + " | " + produto.getQuantidade() + " | " + produto.getValorProduto());
 			
 			// evita pular linha no ultimo produto
 			if(count<quantidade){
@@ -51,17 +51,16 @@ public class BancoProdutos {
 	
 	
 	public boolean adicionarProduto(Produto produto, Object user) {
-		
 		// verifica se é um adm
-		
-			if(verificarPermissao(user)) {
-				produto.setId(idAtual++);
-				produtos.add(produto);
-				quantidade++;
-				return true;
-			}
-			return false;
+		if(verificarPermissao(user)) {
+			produto.setId(idAtual++);
+			produtos.add(produto);
+			quantidade++;
+			return true;
 		}
+		
+		return false;
+	}
 	
 	
 	public boolean removerProdutos(Produto produto, Object user) {
@@ -80,26 +79,21 @@ public class BancoProdutos {
 	}
 	
 	public boolean editarProdutos(long buscarId,Produto produtoAtual, Object user) {
-		
 		if(verificarPermissao(user)) {
 			for(Produto produto:produtos) {
 				if(produto.getId() == buscarId) {
-				produto.setNome(produtoAtual.getNome());
-				produto.setDescricao(produtoAtual.getDescricao());
-				produto.setQuantidade(produtoAtual.getQuantidade());
-				produto.setValorProduto(produtoAtual.getValorProduto());
-				System.out.println("Produto editdo.");
-				// finalizar o looping
-				return true;
+					produto.setNome(produtoAtual.getNome());
+					produto.setDescricao(produtoAtual.getDescricao());
+					produto.setQuantidade(produtoAtual.getQuantidade());
+					produto.setValorProduto(produtoAtual.getValorProduto());
+					return true;
 				}
-			
 			}
 		}
 		return false;
 	}
 	
 	public boolean verificarPermissao(Object user) {
-		
 		if(user instanceof Administrador) {
 			Administrador adm = (Administrador) user;
 			
@@ -107,6 +101,7 @@ public class BancoProdutos {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 	
