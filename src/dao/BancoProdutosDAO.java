@@ -93,4 +93,33 @@ public class BancoProdutosDAO { // id, nome, descricao, quantidade
 		}
 	}
 	
+	public static ArrayList<Produto> carregar() {
+		ArrayList<Produto> produtos = new ArrayList<Produto>();
+		String query = "select * from Produto";
+		
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			long id;
+			String nome, descricao;
+			int quantidade;
+			
+			ResultSet set = statement.executeQuery();
+			
+			while(set.next()) {
+				
+				id = set.getLong("id");
+				nome = set.getString("nome");
+				descricao = set.getString("descricao");
+				quantidade = set.getInt("quantidade");
+				
+				produtos.add(new Produto(id, nome, descricao, quantidade));
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException("Erro ao carregar o produto: " + e.getMessage());
+		}
+		
+		return produtos;
+	}
+	
 }
