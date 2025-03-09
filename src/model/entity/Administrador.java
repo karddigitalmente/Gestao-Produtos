@@ -3,8 +3,10 @@ package model.entity;
 public class Administrador extends Pessoa {
 	private AdministradorCargo cargo;
 	
-	public Administrador(String nome) {
+	public Administrador(String nome, AdministradorCargo cargo) {
 		super(nome);
+		
+		this.cargo = cargo;
 	}
 	
 	public Administrador(long id, String nome, String cpf, String senha, AdministradorCargo cargo) {
