@@ -4,29 +4,39 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.entity.Produto;
+import model.entity.ProdutoAtributos;
 import util.ConexaoBanco;
 
-public class BancoProdutosDAO { // id, nome, descricao, quantidade
+public class BancoProdutosDAO {
 
 	public static void salvar(Produto produto) {
 		// comando pro SQL
-		String query = "insert into Produto (id, nome, descricao, quantidade) values (?, ?, ?, ?)";
+		String query = "INSERT INTO Produto (id, nome, descricao, quantidade, valor) values (?, ?, ?, ?, ?)";
 		
 		// executa a query
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
 			
 			// substitui o "?"
-			statement.setString(1, Long.toString(produto.getId()));
+			statement.setLong(1, produto.getId());
 			statement.setString(2, produto.getNome());
 			statement.setString(3, produto.getDescricao());
-			statement.setString(4, Integer.toString(produto.getQuantidade()));
+			statement.setInt(4, produto.getQuantidade());
+			statement.setDouble(5, produto.getValorProduto());
 			
-			statement.executeUpdate();
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas > 0) {
+				System.out.println("Produto adicionado com sucesso!");
+			} else {
+				System.out.println("Produto não adicionado!");
+			}
+			
 		} catch(SQLException e) {
-			throw new RuntimeException("Erro ao salvar o produto: " + e.getMessage());
+			System.err.println("Erro ao salvar o produto: " + e.getMessage());
 		}
 	}
 	
@@ -36,6 +46,7 @@ public class BancoProdutosDAO { // id, nome, descricao, quantidade
 		Produto produto;
 		String nome, descricao;
 		int quantidade;
+		double valor;
 		
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query);){
@@ -47,9 +58,10 @@ public class BancoProdutosDAO { // id, nome, descricao, quantidade
 				nome = result.getString("nome");
 				descricao = result.getString("descricao");
 				quantidade = result.getInt("quantidade");
+				valor = result.getDouble("valor");
 				
 				// criar um produto com os valores pegados do banco
-				produto = new Produto(idProduto, nome, descricao, quantidade);
+				produto = new Produto(idProduto, nome, descricao, quantidade, valor);
 				System.out.println(produto);
 				return;
 			}
@@ -59,12 +71,30 @@ public class BancoProdutosDAO { // id, nome, descricao, quantidade
 			throw new RuntimeException("Erro ao buscar o produto: " + e.getMessage());
 		}
 	}
-	long id;
-	private String nome;
-	private String descricao; 
-	private int quantidade;
 	
-	public static void filtrar(ProdutoAtributos atributos, String valor) {
+	public static void remover(long id) {
+		String query = "DELETE FROM Produto WHERE id=?";
+		
+		// Executar a query
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			
+			statement.setString(1, Long.toString(id));
+			
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas == 0) {
+				System.out.println("Não foi encontrado produto com este id!!");
+			} else {
+				System.out.println("Administrador Removido com Sucesso!");
+			}
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("Erro ao salvar o produto: " + e.getMessage());
+		}
+	}
+
+	public static void filtrar(ProdutoAtributos atributos, double valor) {
 		String query = "select * from Produto where " + atributos + "=?";	
 		long id;
 		String nome, descricao;
@@ -74,7 +104,7 @@ public class BancoProdutosDAO { // id, nome, descricao, quantidade
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {
 			
-			statement.setLog(1,id);
+			statement.setDouble(1,valor);
 			
 			ResultSet result = statement.executeQuery();
 			while(result.next()) {
@@ -84,13 +114,44 @@ public class BancoProdutosDAO { // id, nome, descricao, quantidade
 				descricao = result.getString("descricao");
 				quantidade = result.getInt("quantidade");
 				
-				Produto produto = new Produto(id, nome, descricao, quantidade);
+				Produto produto = new Produto(id, nome, descricao, quantidade, valor);
 				System.out.println(produto);
 			}
 				
 		} catch (SQLException e) {
 			throw new RuntimeException("Erro ao buscar o produto: " + e.getMessage());
 		}
+	}
+	
+	public static ArrayList<Produto> carregar() {
+		ArrayList<Produto> produtos = new ArrayList<Produto>();
+		String query = "select * from Produto";
+		
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			long id;
+			String nome, descricao;
+			int quantidade;
+			double valor;
+			
+			ResultSet set = statement.executeQuery();
+			
+			while(set.next()) {
+				
+				id = set.getLong("id");
+				nome = set.getString("nome");
+				descricao = set.getString("descricao");
+				quantidade = set.getInt("quantidade");
+				valor = set.getInt("valor");
+				
+				produtos.add(new Produto(id, nome, descricao, quantidade, valor));
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException("Erro ao carregar o produto: " + e.getMessage());
+		}
+		
+		return produtos;
 	}
 	
 }
