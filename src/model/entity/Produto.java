@@ -8,6 +8,19 @@ public class Produto {
 	private int quantidade;
 	private double valorProduto;
 	
+	public Produto(String nome, int quantidade, double valorProduto) {
+		this.nome = nome;
+		this.quantidade = quantidade;
+		this.valorProduto = valorProduto;
+	}
+	
+	public Produto(String nome, String descricao, int quantidade, double valorProduto) {
+		this.nome = nome;
+		this.descricao = descricao;
+		this.quantidade = quantidade;
+		this.valorProduto = valorProduto;
+	}
+	
 	public Produto(Long id, String nome, String descricao, int quantidade, double valorProduto) {
 		this.id = id;
 		this.nome = nome;

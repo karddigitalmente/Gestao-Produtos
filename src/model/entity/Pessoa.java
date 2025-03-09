@@ -15,10 +15,17 @@ public abstract class Pessoa {
 		this.nome = nome;
 	}
 	
-	public Pessoa(long id, String nome, String cpf, String senha) {
-		this.id = id;
+	public Pessoa(String nome, String cpf, String senha) {
+		setId(id);
 		this.nome = nome;
-		this.cpf = cpf;
+		setCpf(cpf);
+		this.senha = senha;
+	}
+	
+	public Pessoa(long id, String nome, String cpf, String senha) {
+		setId(id);
+		this.nome = nome;
+		setCpf(cpf);
 		this.senha = senha;
 	}
 

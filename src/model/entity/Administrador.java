@@ -9,6 +9,11 @@ public class Administrador extends Pessoa {
 		this.cargo = cargo;
 	}
 	
+	public Administrador(String nome, String cpf, String senha, AdministradorCargo cargo) {
+		super(nome, cpf, senha);
+		this.cargo = cargo;
+	}
+	
 	public Administrador(long id, String nome, String cpf, String senha, AdministradorCargo cargo) {
 		super(id, nome, cpf, senha);
 		this.cargo = cargo;
