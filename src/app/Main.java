@@ -85,9 +85,9 @@ public class Main {
 		switch(escolha) {
 		case 1:
 			System.out.print("1- Adicionar"
-					+ "\n2- Procurar"
-					+ "\n3- Editar"
-					+ "\n4- Remover\n> ");
+							+ "\n2- Procurar"
+							+ "\n3- Editar"
+							+ "\n4- Remover\n> ");
 			escolha = sc.nextInt();
 			if(escolha == 1) {
 				
@@ -98,8 +98,34 @@ public class Main {
 
 	static void criarUser() {
 		String nome,cpf,senha;
-		Turno Turno;
 		double salario;
+		Turno turno;
 		
+		System.out.print("Informe o nome: ");
+		nome = sc.next();
+		System.out.print("Informe o cpf: ");
+		cpf = sc.next();
+		System.out.print("Informe a senha: ");
+		senha = sc.next();
+		System.out.print("Informe o salario: ");
+		salario = sc.nextDouble();
+		System.out.println("Informe o turno: "
+						+ "\n1- Manhã"
+						+ "\n2- Tarde"
+						+ "\n3- Noite");
+		int escolha = sc.nextInt();
+		switch(escolha) {
+		case 1:
+			turno = Turno.MANHA;
+			break;
+		case 2:
+			turno = Turno.TARDE;
+			break;
+		case 3:
+			turno = Turno.NOITE;
+			break;
+		default:
+			System.out.println("Turno inválido.");
+		}
 	}
 }
