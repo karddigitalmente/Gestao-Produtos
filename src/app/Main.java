@@ -2,6 +2,8 @@ package app;
 
 import java.util.Scanner;
 
+import dao.UsuarioDAO;
+import dao.AdministradorDAO;
 import model.collection.BancoAdministrador;
 import model.collection.BancoUsuarioPadrao;
 import model.entity.Administrador;
@@ -37,7 +39,7 @@ public class Main {
 		
 		switch(escolha) {
 		case 1:
-			criarAdm();
+		
 				
 			
 		
@@ -89,17 +91,27 @@ public class Main {
 							+ "\n3- Editar"
 							+ "\n4- Remover\n> ");
 			escolha = sc.nextInt();
-			if(escolha == 1) {
-				
+			switch(escolha) {
+			case 1:
+				criarUser();
+			case 2:
+			System.out.print("Informe o Id: ");
+			long id = sc.nextLong();
+			System.out.print("Usuarios:\n");
+			UsuarioDAO.pegar(id);
+			System.out.println("---\n"
+							+ "Administradores: ");
+			AdministradorDAO.pegar(id);
 			}
 		}
 		
 	}
 
 	static void criarUser() {
-		String nome,cpf,senha;
+		String nome, cpf, senha;
 		double salario;
 		Turno turno;
+		float taxaVenda;
 		
 		System.out.print("Informe o nome: ");
 		nome = sc.next();
@@ -107,25 +119,37 @@ public class Main {
 		cpf = sc.next();
 		System.out.print("Informe a senha: ");
 		senha = sc.next();
+		System.out.println("Informe o turno: "
+				+ "\n1- Manhã"
+				+ "\n2- Tarde"
+				+ "\n3- Noite");
+		
+			int escolha = sc.nextInt();
+			switch(escolha) {
+			case 1:
+				turno = Turno.MANHA;
+				break;
+			case 2:
+				turno = Turno.TARDE;
+				break;
+			case 3:
+				turno = Turno.NOITE;
+				break;
+			default:
+				System.out.println("Turno inválido.");
+				return;
+			}
+			
 		System.out.print("Informe o salario: ");
 		salario = sc.nextDouble();
-		System.out.println("Informe o turno: "
-						+ "\n1- Manhã"
-						+ "\n2- Tarde"
-						+ "\n3- Noite");
-		int escolha = sc.nextInt();
-		switch(escolha) {
-		case 1:
-			turno = Turno.MANHA;
-			break;
-		case 2:
-			turno = Turno.TARDE;
-			break;
-		case 3:
-			turno = Turno.NOITE;
-			break;
-		default:
-			System.out.println("Turno inválido.");
-		}
+		System.out.println("Informe a taxa de venda: ");
+		taxaVenda = sc.nextFloat();
+		
+		 user = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
+		 if(bancoUser.adicionar(user, padrao)) {
+			 System.out.print("Conta criada com sucesso!");
+		 } else {
+			 System.out.print("Erro ao criar a conta.");
+		 }
 	}
 }
