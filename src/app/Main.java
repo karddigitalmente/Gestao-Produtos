@@ -5,26 +5,29 @@ import java.util.Scanner;
 import dao.UsuarioDAO;
 import dao.AdministradorDAO;
 import model.collection.BancoAdministrador;
+import model.collection.BancoProdutos;
 import model.collection.BancoUsuarioPadrao;
 import model.entity.Administrador;
 import model.entity.AdministradorCargo;
+import model.entity.Produto;
 import model.entity.Turno;
 import model.entity.Usuario;
 
 public class Main {
 	static Scanner sc = new Scanner(System.in);
-	static BancoAdministrador bancoAdm;
-	static BancoUsuarioPadrao bancoUser;
+	static BancoAdministrador bancoAdm = new BancoAdministrador();
+	static BancoUsuarioPadrao bancoUser = new BancoUsuarioPadrao();
+	static BancoProdutos bancoProduto = new BancoProdutos();
+	static Produto produto;
 	static Usuario user;
+	static Object us;
 	static Administrador adm;
 	//conta padrao
 	static Administrador padrao = new Administrador("padrao","00000000000","system", AdministradorCargo.GERENTE);
 	// garantir que o adm crie uma conta
 	
 	public static void main(String[] args) {
-		bancoUser = new BancoUsuarioPadrao();
-		bancoAdm = new BancoAdministrador();
-
+		
 		// garantir a pessoa criar a primeira conta(adm)
 		if(bancoAdm.getAdminsitradores().size() == 0) {
 			System.out.print("Você não possui uma conta administrador, vamos criar!!\n");
@@ -38,9 +41,33 @@ public class Main {
 		int escolha = sc.nextInt();
 		
 		switch(escolha) {
+		
 		//Logar
 		case 1:
-			// método de Logar
+			int cargo;
+			System.out.print("Informe o cargo: \n"
+					+ "1-Gerente\n"
+					+ "2-Supervisor_Produtos\n"
+					+ "3-Supervisor_Vendedor"
+					+ "4-Vendedor");
+			cargo = sc.nextInt();
+			
+			switch(cargo) {
+				case 1:
+					telaAdm();
+					break;
+				case 2:
+					telaSupervisoProdutos();
+					break;
+				case 3: 
+					telaSupervisorVendedor();
+					break;
+				case 4:
+					telaVendedor();
+					break;
+				default:
+					System.out.print("Opção escolhida inválida!");
+			}
 			break;
 			
 		//Cadastrar
@@ -63,6 +90,102 @@ public class Main {
 			}
 		
 		sc.close();
+		}
+	}
+	
+	
+	
+	static void telaAdm() {
+		System.out.println("Olá, " + adm.getNome());
+		System.out.print("1- Gerenciar usuário"
+						+ "\n2- Gerenciar produtos\n> ");
+		int escolha = sc.nextInt();
+		switch(escolha) {
+		case 1:
+			System.out.print("1- Adicionar"
+							+ "\n2- Procurar"
+							+ "\n3- Editar"
+							+ "\n4- Remover\n> ");
+			escolha = sc.nextInt();
+			switch(escolha) {
+			case 1:
+				criarUser();
+			case 2:
+			System.out.print("Informe o Id: ");
+			long id = sc.nextLong();
+			System.out.print("Usuarios:\n");
+			UsuarioDAO.pegar(id);
+			System.out.println("---\n"
+							+ "Administradores: ");
+			AdministradorDAO.pegar(id);
+			}
+		}
+		
+	}
+
+	
+	
+	static void telaVendedor() {
+		long idProduto,idUsuario;
+		double valor;
+		System.out.print("Informe o id do produto: \n>");
+		idProduto = sc.nextLong();
+		System.out.print("Informe o valor do produto: \n>");
+		valor = sc.nextDouble();
+		System.out.print("Informe o seu id:\n> ");
+		idUsuario = sc.nextLong();
+		
+		if(bancoProduto.vendaProduto(idProduto, valor, idUsuario)){
+			System.out.print("Operação realizada com sucesso!");
+		}
+		else {
+			System.out.print("Erro!");
+		}
+		
+		
+		
+	}
+	
+	static void telaSupervisorProdutos() {
+		int opcao, quantidade;
+		long id;
+		String nome, descricao;
+		double valor;
+		System.out.print("Oque deseja fazer?\n"
+					+ "1-Editar Produtos\n"
+					+ "2-Remover Produto\n"
+					+ "3-Adicionar Produto\n");
+		opcao = sc.nextInt();
+		
+		switch(opcao) {
+		
+		case 1:
+			System.out.print("Informe o id do produto:\n>");
+			id = sc.nextLong();
+			sc.nextLine();
+			System.out.print("Novas informações:\n");
+			System.out.print("Nome:\n>");
+			nome = sc.nextLine();
+			System.out.print("Descrição:\n>");
+			descricao = sc.nextLine();
+			System.out.print("Quantidade:\n>");
+			quantidade = sc.nextInt();
+			System.out.print("Valor do produto:\n>");
+			valor = sc.nextDouble();
+			
+			produto = new Produto(nome,descricao,quantidade,valor);
+			
+			if(bancoProduto.editarProdutos(id, produto, us)) {
+				System.out.print("Informações alteradas com sucesso!!");
+			}
+			else {
+				System.out.print("Não foi possivel editar!!");
+			}
+			
+			break;
+			
+			
+			
 		}
 	}
 	
@@ -98,34 +221,6 @@ public class Main {
 		}			
 	}
 	
-	static void telaAdm() {
-		System.out.println("Olá, " + adm.getNome());
-		System.out.print("1- Gerenciar usuário"
-						+ "\n2- Gerenciar produtos\n> ");
-		int escolha = sc.nextInt();
-		switch(escolha) {
-		case 1:
-			System.out.print("1- Adicionar"
-							+ "\n2- Procurar"
-							+ "\n3- Editar"
-							+ "\n4- Remover\n> ");
-			escolha = sc.nextInt();
-			switch(escolha) {
-			case 1:
-				criarUser();
-			case 2:
-			System.out.print("Informe o Id: ");
-			long id = sc.nextLong();
-			System.out.print("Usuarios:\n");
-			UsuarioDAO.pegar(id);
-			System.out.println("---\n"
-							+ "Administradores: ");
-			AdministradorDAO.pegar(id);
-			}
-		}
-		
-	}
-
 	static void criarUser() {
 		String nome, cpf, senha;
 		double salario;

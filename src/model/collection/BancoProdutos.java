@@ -2,7 +2,6 @@ package model.collection;
 
 import java.util.ArrayList;
 
-import dao.AdministradorDAO;
 import dao.BancoProdutosDAO;
 import model.entity.Produto;
 import model.entity.Administrador;
