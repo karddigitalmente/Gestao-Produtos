@@ -1,21 +1,17 @@
 package model.collection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.UsuarioDAO;
 import model.entity.Administrador;
 import model.entity.AdministradorCargo;
 import model.entity.Usuario;
-import util.ConexaoBanco;
 
 public class BancoUsuarioPadrao {
 	
 	private int quantidade;
 	
-	// Id gerenciado pelo programa
+	// id gerenciado pelo programa
 	private long idAtual = 1;
 	private ArrayList<Usuario> usuarios;
 	
@@ -25,7 +21,7 @@ public class BancoUsuarioPadrao {
 		
 	}
 	
-	public void adicionar(Usuario usuario, Object user) {
+	public boolean adicionar(Usuario usuario, Object user) {
 		// Id gerenciado pelo programa
 		if(user instanceof Administrador) {
 			Administrador adm = (Administrador) user;
@@ -33,33 +29,11 @@ public class BancoUsuarioPadrao {
 				usuario.setId(idAtual++);
 				usuarios.add(usuario);
 				UsuarioDAO.salvar(usuario);
-				
 				quantidade++;
+				return true;
 			}
 		}
-		
-	}
-	
-	public static void remover(long id) {
-		String query = "DELETE FROM Usuario WHERE id=?";
-		
-		// Executar a query
-		try(Connection conn = ConexaoBanco.getConnection();
-			PreparedStatement statement = conn.prepareStatement(query)) {
-			
-			statement.setLong(1, id);
-			
-			int linhasAfetadas = statement.executeUpdate();
-			
-			if(linhasAfetadas == 0) {
-				System.out.println("Não foi encontrado usuário com este id!!");
-			} else {
-				System.out.println("Usuário Removido com Sucesso!");
-			}
-			
-		} catch (SQLException e) {
-			System.err.println("Erro ao salvar o usuário: " + e.getMessage());
-		}
+		return false;
 	}
 	
 	public int getQuantidade() {
@@ -74,21 +48,16 @@ public class BancoUsuarioPadrao {
 		this.usuarios = usuarios;
 	}
 	
-	public void listar() {
-		System.out.println(toString());
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder resultado = new StringBuilder();
 		
-		// Para não printar o newLine ao chegar no último produto
+		// para não printar o newLine ao chegar no último produto
 		int count = 1;
 		
 		for(Usuario usuario : usuarios) {
 			resultado.append(usuario.getId() + " " + usuario.getNome() + " " + usuario.getCpf() + " " + usuario.getSenha() + " " + usuario.getTurno() );
 			
-			// Comentário acima kk
 			if(count < quantidade) {
 				resultado.append("\n");
 			}
@@ -115,7 +84,7 @@ public class BancoUsuarioPadrao {
 		
 	}
 	
-	//Decidir se vai juntar com produto ou deixar separado.
+	// decidir se vai juntar com produto ou deixar separado.
 	public boolean vendaQuantidade(long id) {
 		
 		for(Usuario usuario : usuarios) {
