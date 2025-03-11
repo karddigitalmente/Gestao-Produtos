@@ -22,6 +22,7 @@ public class Main {
 	// garantir que o adm crie uma conta
 	
 	public static void main(String[] args) {
+		bancoUser = new BancoUsuarioPadrao();
 		bancoAdm = new BancoAdministrador();
 
 		// garantir a pessoa criar a primeira conta(adm)
@@ -29,19 +30,37 @@ public class Main {
 			System.out.print("Você não possui uma conta administrador, vamos criar!!\n");
 			criarAdm();
 			telaAdm();
-		}
-			
-			
+		}	
 			
 		System.out.println("!!Bem vindo!!");
-		System.out.print("1- Login\n> ");
+		System.out.print("1- Login\n");
+		System.out.print("2- Cadastrar\n> ");
 		int escolha = sc.nextInt();
 		
 		switch(escolha) {
+		//Logar
 		case 1:
-		
-				
+			// método de Logar
+			break;
 			
+		//Cadastrar
+		case 2:
+			System.out.println("Qual nível da conta?\n");
+			
+			System.out.println("1- Administrador");
+			System.out.println("2- Padrão\n> ");
+			
+			escolha = sc.nextInt();
+			
+			switch(escolha) {
+			case 1:
+				criarAdm();
+				break;
+				
+			case 2:
+				criarUser();
+				break;
+			}
 		
 		sc.close();
 		}
