@@ -8,16 +8,10 @@ public class Usuario extends Pessoa {
 	private Turno turno;
 	private float taxaVenda;
 	
-	public Usuario(String nome, Turno turno) {
-		super(nome);
-		this.turno = turno;
-	}
-	
-	public Usuario(String nome, String cpf, String senha, Turno turno, double salario, double comissao, float taxaVenda) {
+	public Usuario(String nome, String cpf, String senha, Turno turno, double salario, float taxaVenda) {
 		super(nome, cpf, senha);
 		this.turno = turno;
 		this.salario = salario;
-		this.comissao = comissao;
 		this.taxaVenda = taxaVenda;
 	}
 	
