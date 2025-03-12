@@ -14,6 +14,7 @@ import model.entity.Turno;
 import model.entity.Usuario;
 
 public class Main {
+	
 	static Scanner sc = new Scanner(System.in);
 	static BancoAdministrador bancoAdm = new BancoAdministrador();
 	static BancoUsuarioPadrao bancoUser = new BancoUsuarioPadrao();
@@ -24,7 +25,6 @@ public class Main {
 	static Administrador adm;
 	//conta padrao
 	static Administrador padrao = new Administrador("padrao","00000000000","system", AdministradorCargo.GERENTE);
-	// garantir que o adm crie uma conta
 	
 	public static void main(String[] args) {
 		
@@ -37,19 +37,17 @@ public class Main {
 			
 		System.out.println("!!Bem vindo!!");
 		System.out.print("1- Login\n");
-		System.out.print("2- Cadastrar\n> ");
 		int escolha = sc.nextInt();
 		
 		switch(escolha) {
-		
-		//Logar
+		// logar
 		case 1:
 			int cargo;
 			System.out.print("Informe o cargo: \n"
-					+ "1-Gerente\n"
-					+ "2-Supervisor_Produtos\n"
-					+ "3-Supervisor_Vendedor"
-					+ "4-Vendedor");
+					+ "1- Gerente\n"
+					+ "2- Supervisor de Produtos\n"
+					+ "3- Supervisor de Vendedor"
+					+ "4- Vendedor");
 			cargo = sc.nextInt();
 			
 			switch(cargo) {
@@ -57,10 +55,10 @@ public class Main {
 					telaAdm();
 					break;
 				case 2:
-					telaSupervisoProdutos();
+					
 					break;
 				case 3: 
-					telaSupervisorVendedor();
+					
 					break;
 				case 4:
 					telaVendedor();
@@ -68,29 +66,9 @@ public class Main {
 				default:
 					System.out.print("Opção escolhida inválida!");
 			}
-			break;
-			
-		//Cadastrar
-		case 2:
-			System.out.println("Qual nível da conta?\n");
-			
-			System.out.println("1- Administrador");
-			System.out.println("2- Padrão\n> ");
-			
-			escolha = sc.nextInt();
-			
-			switch(escolha) {
-			case 1:
-				criarAdm();
-				break;
-				
-			case 2:
-				criarUser();
-				break;
-			}
-		
-		sc.close();
 		}
+		
+	sc.close();
 	}
 	
 	
@@ -98,32 +76,35 @@ public class Main {
 	static void telaAdm() {
 		System.out.println("Olá, " + adm.getNome());
 		System.out.print("1- Gerenciar usuário"
-						+ "\n2- Gerenciar produtos\n> ");
+						+"\n2- Gerenciar produtos\n> ");
 		int escolha = sc.nextInt();
 		switch(escolha) {
 		case 1:
 			System.out.print("1- Adicionar"
 							+ "\n2- Procurar"
-							+ "\n3- Editar"
-							+ "\n4- Remover\n> ");
+							+ "\n3- Editar Usuario"
+							+ "\n4- Editar Administrador"
+							+ "\n5- Remover\n> ");
 			escolha = sc.nextInt();
 			switch(escolha) {
 			case 1:
 				criarUser();
 			case 2:
-			System.out.print("Informe o Id: ");
-			long id = sc.nextLong();
-			System.out.print("Usuarios:\n");
-			UsuarioDAO.pegar(id);
-			System.out.println("---\n"
+				System.out.print("Informe o Id: ");
+				long id = sc.nextLong();
+				System.out.print("Usuarios:\n");
+				UsuarioDAO.pegar(id);
+				System.out.print("---\n"
 							+ "Administradores: ");
-			AdministradorDAO.pegar(id);
+				AdministradorDAO.pegar(id);
+			case 3:
+				
+				
 			}
 		}
 		
 	}
 
-	
 	
 	static void telaVendedor() {
 		long idProduto,idUsuario;
@@ -151,10 +132,11 @@ public class Main {
 		long id;
 		String nome, descricao;
 		double valor;
+		
 		System.out.print("Oque deseja fazer?\n"
-					+ "1-Editar Produtos\n"
-					+ "2-Remover Produto\n"
-					+ "3-Adicionar Produto\n");
+					+ "1- Editar Produtos\n"
+					+ "2- Remover Produto\n"
+					+ "3- Adicionar Produto\n");
 		opcao = sc.nextInt();
 		
 		switch(opcao) {
@@ -197,11 +179,11 @@ public class Main {
 
 		// verifica se existe alguma conta de adm
 		System.out.print("Informe seu nome: ");
-		nomeAdm = sc.next();
+		nomeAdm = sc.nextLine();
 		System.out.print("Informe seu cpf: ");
-		cpf = sc.next();
+		cpf = sc.nextLine();
 		System.out.print("Informe sua senha: ");
-		senha = sc.next();
+		senha = sc.nextLine();
 		System.out.print("Informe o seu cargo: \n" 
 						+ "1- Gerente"
 						+ "\n2- Supervisor de Produtos"
@@ -228,12 +210,12 @@ public class Main {
 		float taxaVenda;
 		
 		System.out.print("Informe o nome: ");
-		nome = sc.next();
+		nome = sc.nextLine();
 		System.out.print("Informe o cpf: ");
-		cpf = sc.next();
+		cpf = sc.nextLine();
 		System.out.print("Informe a senha: ");
-		senha = sc.next();
-		System.out.println("Informe o turno: "
+		senha = sc.nextLine();
+		System.out.print("Informe o turno: "
 				+ "\n1- Manhã"
 				+ "\n2- Tarde"
 				+ "\n3- Noite");
@@ -259,11 +241,11 @@ public class Main {
 		System.out.println("Informe a taxa de venda: ");
 		taxaVenda = sc.nextFloat();
 		
-		 user = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
-		 if(bancoUser.adicionar(user, padrao)) {
-			 System.out.print("Conta criada com sucesso!");
-		 } else {
-			 System.out.print("Erro ao criar a conta.");
+		user = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
+		if(bancoUser.adicionar(user, padrao)) {
+			System.out.print("Conta criada com sucesso!");
+		} else {
+			System.out.print("Erro ao criar a conta.");
 		 }
 	}
 }
