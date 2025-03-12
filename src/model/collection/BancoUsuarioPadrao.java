@@ -22,7 +22,7 @@ public class BancoUsuarioPadrao {
 	}
 	
 	public boolean adicionar(Usuario usuario, Object user) {
-		// Id gerenciado pelo programa
+		// id gerenciado pelo programa
 		if(user instanceof Administrador) {
 			Administrador adm = (Administrador) user;
 			if(adm.getCargo() == AdministradorCargo.GERENTE) {
@@ -33,6 +33,25 @@ public class BancoUsuarioPadrao {
 				return true;
 			}
 		}
+		
+		return false;
+	}
+	
+	public boolean editarUsuario(long buscarId, Usuario usuarioAtual, Object user) {
+		if(permissaoUsuario(user)) {
+			for(Usuario usuario:usuarios) {
+				if(usuario.getId() == buscarId) {
+					usuario.setNome(usuarioAtual.getNome());
+					usuario.setCpf(usuarioAtual.getCpf());
+					usuario.setSenha(usuarioAtual.getSenha());
+					usuario.setTurno(usuarioAtual.getTurno());
+					usuario.setSalario(usuarioAtual.getSalario());
+					usuario.setTaxaVenda(usuarioAtual.getTaxaVenda());
+					return true;
+				}
+			}
+		}
+		
 		return false;
 	}
 	
@@ -68,6 +87,18 @@ public class BancoUsuarioPadrao {
 		return resultado.toString();	
 	}
 	
+	
+	public boolean permissaoUsuario(Object user) {
+		if(user instanceof Administrador) {
+			Administrador adm = (Administrador) user;
+			
+			if(adm.getCargo() == AdministradorCargo.GERENTE || adm.getCargo() == AdministradorCargo.SUPERVISOR_VENDEDORES) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	
 	public boolean comissao(long id, double valorProduto) {
