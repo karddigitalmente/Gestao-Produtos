@@ -8,6 +8,7 @@ import model.collection.BancoAdministrador;
 import model.collection.BancoProdutos;
 import model.collection.BancoUsuarioPadrao;
 import model.entity.Administrador;
+import model.entity.AdministradorAtributos;
 import model.entity.AdministradorCargo;
 import model.entity.Produto;
 import model.entity.Turno;
@@ -61,7 +62,7 @@ public class Main {
 					
 					break;
 				case 4:
-					telaVendedor();
+					telaUser();
 					break;
 				default:
 					System.out.print("Opção escolhida inválida!");
@@ -73,6 +74,56 @@ public class Main {
 	
 	
 	
+
+	// para finalizar
+	static void telaSupervisorProdutos() {
+			int opcao, quantidade;
+			long id;
+			String nome, descricao;
+			double valor;
+			
+			System.out.print("Oque deseja fazer?\n"
+						+ "1- Editar Produtos\n"
+						+ "2- Remover Produto\n"
+						+ "3- Adicionar Produto\n");
+			opcao = sc.nextInt();
+			
+			switch(opcao) {
+			
+			case 1:
+				System.out.print("Informe o id do produto:\n>");
+				id = sc.nextLong();
+				sc.nextLine();
+				System.out.print("Novas informações:\n");
+				System.out.print("Nome:\n>");
+				nome = sc.nextLine();
+				System.out.print("Descrição:\n>");
+				descricao = sc.nextLine();
+				System.out.print("Quantidade:\n>");
+				quantidade = sc.nextInt();
+				System.out.print("Valor do produto:\n>");
+				valor = sc.nextDouble();
+				
+				produto = new Produto(nome,descricao,quantidade,valor);
+				
+				if(bancoProduto.editarProduto(id, produto, us)) {
+					System.out.print("Informações alteradas com sucesso!!");
+				}
+				else {
+					System.out.print("Não foi possivel editar!!");
+				}
+				
+				break;
+				
+				
+				
+			}
+		}
+		
+		
+	// metodos adm
+	
+	// para finalizar
 	static void telaAdm() {
 		System.out.println("Olá, " + adm.getNome());
 		System.out.print("1- Gerenciar usuário"
@@ -90,6 +141,7 @@ public class Main {
 			switch(escolha) {
 			case 1:
 				criarUser();
+				break;
 			case 2:
 				System.out.print("Informe o id: ");
 				long id = sc.nextLong();
@@ -98,122 +150,17 @@ public class Main {
 				System.out.print("---\n"
 							+ "Administradores: ");
 				AdministradorDAO.pegar(id);
+				break;
 			case 3:
-				System.out.print("Informe o id do usuário a ser editado: ");
-				long id1 = sc.nextLong();
-				sc.nextLine();
-				System.out.print("Informe o novo nome: ");
-				String nome = sc.nextLine();
-				System.out.print("Informe o novo cpf: ");
-				String cpf = sc.nextLine();
-				System.out.print("Informe a nova senha: ");
-				String senha = sc.nextLine();
-				System.out.print("Informe o novo turno: "
-						+ "\n1- Manhã"
-						+ "\n2- Tarde"
-						+ "\n3- Noite");
-				int escolhaTurno = sc.nextInt();
-				sc.nextLine();
+				editarUser();
+				break;
+			case 4:
 				
-				Turno turno;
-					switch(escolhaTurno) {
-					case 1:
-						turno = Turno.MANHA;
-						break;
-					case 2:
-						turno = Turno.TARDE;
-						break;
-					case 3:
-						turno = Turno.NOITE;
-						break;
-					default:
-						System.out.println("Turno inválido.");
-						return;
-					}
-				System.out.print("Informe o novo salario: ");
-				double salario = sc.nextDouble();
-				System.out.print("Informe a nova taxa de venda: ");
-				float taxaVenda = sc.nextFloat();
-				
-				Usuario usuarioEditado = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
-				if(bancoUser.editarUsuario(id1, usuarioEditado, adm)) {
-					System.out.print("Usuário editado!");
-				} else {
-					System.out.print("Erro ao editar o usuário.");
-				}
 			}
-		}
-		
-	}
-
-	// para finalizar
-	static void telaVendedor() {
-		long idProduto,idUsuario;
-		double valor;
-		System.out.print("Informe o id do produto: \n>");
-		idProduto = sc.nextLong();
-		System.out.print("Informe o valor do produto: \n>");
-		valor = sc.nextDouble();
-		System.out.print("Informe o seu id:\n> ");
-		idUsuario = sc.nextLong();
-		
-		if(bancoProduto.vendaProduto(idProduto, valor, idUsuario)){
-			System.out.print("Operação realizada com sucesso!");
-		}
-		else {
-			System.out.print("Erro!");
-		}
-		
-		
-		
-	}
-	
-	// para finalizar
-	static void telaSupervisorProdutos() {
-		int opcao, quantidade;
-		long id;
-		String nome, descricao;
-		double valor;
-		
-		System.out.print("Oque deseja fazer?\n"
-					+ "1- Editar Produtos\n"
-					+ "2- Remover Produto\n"
-					+ "3- Adicionar Produto\n");
-		opcao = sc.nextInt();
-		
-		switch(opcao) {
-		
-		case 1:
-			System.out.print("Informe o id do produto:\n>");
-			id = sc.nextLong();
-			sc.nextLine();
-			System.out.print("Novas informações:\n");
-			System.out.print("Nome:\n>");
-			nome = sc.nextLine();
-			System.out.print("Descrição:\n>");
-			descricao = sc.nextLine();
-			System.out.print("Quantidade:\n>");
-			quantidade = sc.nextInt();
-			System.out.print("Valor do produto:\n>");
-			valor = sc.nextDouble();
-			
-			produto = new Produto(nome,descricao,quantidade,valor);
-			
-			if(bancoProduto.editarProduto(id, produto, us)) {
-				System.out.print("Informações alteradas com sucesso!!");
-			}
-			else {
-				System.out.print("Não foi possivel editar!!");
-			}
-			
-			break;
-			
-			
-			
 		}
 	}
 	
-	public static void criarAdm() {
+	static void criarAdm() {
 		String nomeAdm, cpf, senha;
 		int cargo;
 		
@@ -229,7 +176,7 @@ public class Main {
 		System.out.print("Informe o seu cargo: \n" 
 						+ "1- Gerente"
 						+ "\n2- Supervisor de Produtos"
-						+ "\n3- Supervisor de Revendedores\n> ");
+						+ "\n3- Supervisor de Vendedores\n> ");
 		cargo = sc.nextInt();
 			if(cargo != 1) {
 				System.out.print("Você não possui permissão!");
@@ -244,6 +191,78 @@ public class Main {
 			System.out.println("Erro ao criar a conta.");
 		}			
 	}
+
+	static void editarAdm() {
+		System.out.print("Informe o id do adm a ser editado: ");
+		long id = sc.nextLong();
+		sc.nextLine();
+		
+		adm = bancoAdm.buscarId(id);
+		if(adm == null) {
+			System.out.print("Adm não encontrado.");
+			return;
+		}
+		
+		System.out.print("Informe o que você quer editar:\n ");
+		System.out.print("1- Nome"
+					+ "\n2- Cpf"
+					+ "\n3- Senha"
+					+ "\n4- Cargo");
+		int escolha = sc.nextInt();
+		sc.nextLine();
+		
+		AdministradorAtributos atributo;
+		Object valorEditado;
+		
+		switch(escolha) {
+		case 1:
+			atributo = AdministradorAtributos.nome;
+			System.out.print("Informe o novo nome: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 2:
+			atributo = AdministradorAtributos.cpf;
+			System.out.print("informe o novo cpf: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 3:
+			atributo = AdministradorAtributos.senha;
+			System.out.print("Informe a nova senha: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 4: 
+			atributo = AdministradorAtributos.cargo;
+			System.out.print("Informe o novo cargo:"
+					+ "\n1- Gerente"
+					+ "\n2- Supervisor de Produtos"
+					+ "\n3- Supervisor de Vendedores");
+			int escolhaCargo = sc.nextInt();
+			sc.nextLine();
+				switch(escolhaCargo) {
+				case 1:
+					valorEditado = AdministradorCargo.GERENTE;
+					break;
+				case 2:
+					valorEditado = AdministradorCargo.SUPERVISOR_PRODUTOS;
+					break;
+				case 3:
+					valorEditado = AdministradorCargo.SUPERVISOR_VENDEDORES;
+					break;
+				default:
+					System.out.print("Cargo Inválido.");
+					return;
+				}
+				
+		if(bancoAdm.editar(atributo, adm, valorEditado, adm)) {
+			System.out.print("Adm editado!");
+		} else {
+			System.out.print("Erro ao editar usuário");
+		}
+		}
+	}
+	
+	
+	// metodos user
 	
 	static void criarUser() {
 		String nome, cpf, senha;
@@ -289,5 +308,69 @@ public class Main {
 		} else {
 			System.out.print("Erro ao criar a conta.");
 		 }
+}
+
+	static void editarUser() {
+		System.out.print("Informe o id do usuário a ser editado: ");
+		long id = sc.nextLong();
+		sc.nextLine();
+		System.out.print("Informe o novo nome: ");
+		String nome = sc.nextLine();
+		System.out.print("Informe o novo cpf: ");
+		String cpf = sc.nextLine();
+		System.out.print("Informe a nova senha: ");
+		String senha = sc.nextLine();
+		System.out.print("Informe o novo turno: "
+				+ "\n1- Manhã"
+				+ "\n2- Tarde"
+				+ "\n3- Noite");
+		int escolhaTurno = sc.nextInt();
+		sc.nextLine();
+		
+		Turno turno;
+			switch(escolhaTurno) {
+			case 1:
+				turno = Turno.MANHA;
+				break;
+			case 2:
+				turno = Turno.TARDE;
+				break;
+			case 3:
+				turno = Turno.NOITE;
+				break;
+			default:
+				System.out.println("Turno inválido.");
+				return;
+			}
+		System.out.print("Informe o novo salario: ");
+		double salario = sc.nextDouble();
+		System.out.print("Informe a nova taxa de venda: ");
+		float taxaVenda = sc.nextFloat();
+		
+		Usuario usuarioEditado = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
+		if(bancoUser.editarUsuario(id, usuarioEditado, adm)) {
+			System.out.print("Usuário editado!");
+		} else {
+			System.out.print("Erro ao editar o usuário.");
+		}
 	}
+	
+	// para finalizar
+		static void telaUser() {
+			long idProduto,idUsuario;
+			double valor;
+			System.out.print("Informe o id do produto: \n>");
+			idProduto = sc.nextLong();
+			System.out.print("Informe o valor do produto: \n>");
+			valor = sc.nextDouble();
+			System.out.print("Informe o seu id:\n> ");
+			idUsuario = sc.nextLong();
+			
+			if(bancoProduto.vendaProduto(idProduto, valor, idUsuario)){
+				System.out.print("Operação realizada com sucesso!");
+			}
+			else {
+				System.out.print("Erro!");
+			}
+		}
 }
