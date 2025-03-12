@@ -86,11 +86,12 @@ public class Main {
 							+ "\n4- Editar Administrador"
 							+ "\n5- Remover\n> ");
 			escolha = sc.nextInt();
+			// usuario
 			switch(escolha) {
 			case 1:
 				criarUser();
 			case 2:
-				System.out.print("Informe o Id: ");
+				System.out.print("Informe o id: ");
 				long id = sc.nextLong();
 				System.out.print("Usuarios:\n");
 				UsuarioDAO.pegar(id);
@@ -98,14 +99,54 @@ public class Main {
 							+ "Administradores: ");
 				AdministradorDAO.pegar(id);
 			case 3:
+				System.out.print("Informe o id do usuário a ser editado: ");
+				long id1 = sc.nextLong();
+				sc.nextLine();
+				System.out.print("Informe o novo nome: ");
+				String nome = sc.nextLine();
+				System.out.print("Informe o novo cpf: ");
+				String cpf = sc.nextLine();
+				System.out.print("Informe a nova senha: ");
+				String senha = sc.nextLine();
+				System.out.print("Informe o novo turno: "
+						+ "\n1- Manhã"
+						+ "\n2- Tarde"
+						+ "\n3- Noite");
+				int escolhaTurno = sc.nextInt();
+				sc.nextLine();
 				
+				Turno turno;
+					switch(escolhaTurno) {
+					case 1:
+						turno = Turno.MANHA;
+						break;
+					case 2:
+						turno = Turno.TARDE;
+						break;
+					case 3:
+						turno = Turno.NOITE;
+						break;
+					default:
+						System.out.println("Turno inválido.");
+						return;
+					}
+				System.out.print("Informe o novo salario: ");
+				double salario = sc.nextDouble();
+				System.out.print("Informe a nova taxa de venda: ");
+				float taxaVenda = sc.nextFloat();
 				
+				Usuario usuarioEditado = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
+				if(bancoUser.editarUsuario(id1, usuarioEditado, adm)) {
+					System.out.print("Usuário editado!");
+				} else {
+					System.out.print("Erro ao editar o usuário.");
+				}
 			}
 		}
 		
 	}
 
-	
+	// para finalizar
 	static void telaVendedor() {
 		long idProduto,idUsuario;
 		double valor;
@@ -127,6 +168,7 @@ public class Main {
 		
 	}
 	
+	// para finalizar
 	static void telaSupervisorProdutos() {
 		int opcao, quantidade;
 		long id;
@@ -157,7 +199,7 @@ public class Main {
 			
 			produto = new Produto(nome,descricao,quantidade,valor);
 			
-			if(bancoProduto.editarProdutos(id, produto, us)) {
+			if(bancoProduto.editarProduto(id, produto, us)) {
 				System.out.print("Informações alteradas com sucesso!!");
 			}
 			else {
