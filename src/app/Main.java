@@ -137,9 +137,10 @@ public class Main {
 							+ "\n4- Editar Administrador"
 							+ "\n5- Remover\n> ");
 			escolha = sc.nextInt();
-			// usuario
+			
 			switch(escolha) {
 			case 1:
+				// usuario
 				criarUser();
 				break;
 			case 2:
@@ -261,7 +262,7 @@ public class Main {
 		}
 	}
 	
-	
+	// metodos vendedor
 	// metodos user
 	
 	static void criarUser() {
@@ -356,21 +357,21 @@ public class Main {
 	}
 	
 	// para finalizar
-		static void telaUser() {
-			long idProduto,idUsuario;
-			double valor;
-			System.out.print("Informe o id do produto: \n>");
-			idProduto = sc.nextLong();
-			System.out.print("Informe o valor do produto: \n>");
-			valor = sc.nextDouble();
-			System.out.print("Informe o seu id:\n> ");
-			idUsuario = sc.nextLong();
+	static void telaUser() {
+		long idProduto,idUsuario;
+		double valor;
+		System.out.print("Informe o id do produto: \n>");
+		idProduto = sc.nextLong();
+		System.out.print("Informe o valor do produto: \n>");
+		valor = sc.nextDouble();
+		System.out.print("Informe o seu id:\n> ");
+		idUsuario = sc.nextLong();
 			
-			if(bancoProduto.vendaProduto(idProduto, valor, idUsuario)){
-				System.out.print("Operação realizada com sucesso!");
-			}
-			else {
-				System.out.print("Erro!");
-			}
+		if(bancoProduto.vendaProduto(idProduto, valor, idUsuario)){
+			System.out.print("Operação realizada com sucesso!");
 		}
+		else {
+			System.out.print("Erro!");
+		}
+	}
 }
