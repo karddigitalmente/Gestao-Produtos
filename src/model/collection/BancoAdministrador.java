@@ -50,6 +50,16 @@ public class BancoAdministrador {
 		return false;
 	}
 	
+	public Administrador buscarId(long id) {
+		for(Administrador adm: administradores) {
+			if(adm.getId() == id) {
+				return adm;
+			}
+		}
+		return null;
+	}
+	
+	
 	public boolean editar(AdministradorAtributos atributo, Administrador administrador, Object valor, Object user) {
 		if(checarPermissao(user)) {
 			if(administradores.contains(administrador)) {
