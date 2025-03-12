@@ -52,7 +52,7 @@ public class BancoProdutos {
 	
 	public boolean adicionarProduto(Produto produto, Object user) {
 		// verifica se é um adm
-		if(verificarPermissao(user)) {
+		if(permissaoProduto(user)) {
 			produto.setId(idAtual++);
 			produtos.add(produto);
 			BancoProdutosDAO.salvar(produto);
@@ -66,7 +66,7 @@ public class BancoProdutos {
 	
 	public boolean removerProdutos(Produto produto, Object user) {
 		// verifica se é um adm
-		if(verificarPermissao(user)) {
+		if(permissaoProduto(user)) {
 			// verifica se o produto está no array
 			if(produtos.contains(produto)) {
 				produtos.remove(produto);
@@ -80,8 +80,8 @@ public class BancoProdutos {
 		return false;
 	}
 	
-	public boolean editarProdutos(long buscarId,Produto produtoAtual, Object user) {
-		if(verificarPermissao(user)) {
+	public boolean editarProduto(long buscarId,Produto produtoAtual, Object user) {
+		if(permissaoProduto(user)) {
 			for(Produto produto:produtos) {
 				if(produto.getId() == buscarId) {
 					produto.setNome(produtoAtual.getNome());
@@ -95,7 +95,7 @@ public class BancoProdutos {
 		return false;
 	}
 	
-	public boolean verificarPermissao(Object user) {
+	public boolean permissaoProduto(Object user) {
 		if(user instanceof Administrador) {
 			Administrador adm = (Administrador) user;
 			
