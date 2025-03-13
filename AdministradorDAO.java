@@ -148,7 +148,7 @@ public class AdministradorDAO {
 	public static ArrayList<Administrador> carregar() {
  		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
  		
- 		String sql = "SELECT * FROM Administrador";
+ 		String sql = "SELECT * FROM Administrador ORDER BY id DESC";
  		
  		try(Connection conn = ConexaoBanco.getConnection();
  			PreparedStatement statement = conn.prepareStatement(sql)) {

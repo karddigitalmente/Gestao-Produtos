@@ -3,16 +3,18 @@ package model.collection;
 import java.util.ArrayList;
 
 import dao.AdministradorDAO;
+import dao.BancoProdutosDAO;
 import model.entity.Administrador;
 import model.entity.AdministradorAtributos;
 import model.entity.AdministradorCargo;
+import model.entity.Produto;
 
 public class BancoAdministrador {
 	
 	private int quantidade;
 	
 	// Id gerenciado pelo programa
-	private long idAtual = 1;
+	private static long idAtual = 1;
 	private ArrayList<Administrador> administradores;
 	
 	public BancoAdministrador() {
@@ -50,6 +52,16 @@ public class BancoAdministrador {
 		return false;
 	}
 	
+	public Administrador buscarId(long id) {
+		for(Administrador adm: administradores) {
+			if(adm.getId() == id) {
+				return adm;
+			}
+		}
+		return null;
+	}
+	
+	
 	public boolean editar(AdministradorAtributos atributo, Administrador administrador, Object valor, Object user) {
 		if(checarPermissao(user)) {
 			if(administradores.contains(administrador)) {
@@ -75,8 +87,13 @@ public class BancoAdministrador {
 					System.err.println("Passe um Atributo válido");
 				
 				//Troca os administradores
-				administradores.set(administradores.indexOf(administrador), administrador);
-				AdministradorDAO.editar(atributo, (String) valor, administrador.getId());
+					
+				try {
+					administradores.set(administradores.indexOf(administrador), administrador);
+					AdministradorDAO.editar(atributo, (String) valor, administrador.getId());
+				} catch(IndexOutOfBoundsException e) {
+					System.err.println("Administrador inválido");
+				}
 				
 				return true;
 			}
@@ -125,7 +142,7 @@ public class BancoAdministrador {
 		return quantidade;
 	}
 	
-	public ArrayList<Administrador> getAdminsitradores() {
+	public ArrayList<Administrador> getAdministradores() {
 		return administradores;
 	}
 	
@@ -134,6 +151,14 @@ public class BancoAdministrador {
 	}
 	
 	public static ArrayList<Administrador> carregar(){
-		return AdministradorDAO.carregar();
+		ArrayList<Administrador> administradores = AdministradorDAO.carregar();
+		
+		
+		if(administradores.size() > 0) {
+			//faz o idAtual ser = ao maior +1
+			idAtual = administradores.get(0).getId() + 1;
+		}
+		
+		return administradores;
 	}
 }
