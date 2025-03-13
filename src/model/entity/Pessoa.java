@@ -16,7 +16,6 @@ public abstract class Pessoa {
 	}
 	
 	public Pessoa(String nome, String cpf, String senha) {
-		setId(id);
 		this.nome = nome;
 		setCpf(cpf);
 		this.senha = senha;
@@ -88,6 +87,20 @@ public abstract class Pessoa {
 	@Override
 	public String toString() {
 		return String.format("Id: %d; Nome: %s; Cpf: %s; Senha: %s;", id, nome, cpf, senha);
+	}
+	
+	@Override
+	public boolean equals(Object pessoa) {
+		
+		if(pessoa instanceof Pessoa) {
+			Pessoa pessoaTemp = (Pessoa) pessoa;
+			
+			if(pessoaTemp.getId() == id) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 }

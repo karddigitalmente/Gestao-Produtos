@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.entity.AdministradorAtributos;
 import model.entity.Produto;
 import model.entity.ProdutoAtributos;
 import util.ConexaoBanco;
@@ -72,6 +73,29 @@ public class BancoProdutosDAO {
 		}
 	}
 	
+	public static void editar(ProdutoAtributos atributo, String valor, long id) {
+		
+		String query = "UPDATE Produto SET " + atributo + " = ?" + " WHERE  id " + "= ?";
+		
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			
+			statement.setString(1,valor);
+			statement.setLong(2,id);
+			
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas == 0) {
+				System.err.println("Não foi possível alterar os dados!");
+			} else {
+				System.out.println("Produto editado com sucesso!");
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Erro ao editar o produto: " + e.getMessage());
+		}
+	}
+	
 	public static void remover(long id) {
 		String query = "DELETE FROM Produto WHERE id=?";
 		
@@ -125,7 +149,7 @@ public class BancoProdutosDAO {
 	
 	public static ArrayList<Produto> carregar() {
 		ArrayList<Produto> produtos = new ArrayList<Produto>();
-		String query = "select * from Produto";
+		String query = "select * from Produto order by id desc";
 		
 		try(Connection conn = ConexaoBanco.getConnection();
 			PreparedStatement statement = conn.prepareStatement(query)) {

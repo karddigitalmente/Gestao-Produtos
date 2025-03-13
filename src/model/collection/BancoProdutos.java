@@ -2,14 +2,17 @@ package model.collection;
 
 import java.util.ArrayList;
 
+import dao.AdministradorDAO;
 import dao.BancoProdutosDAO;
 import model.entity.Produto;
+import model.entity.ProdutoAtributos;
 import model.entity.Administrador;
+import model.entity.AdministradorAtributos;
 import model.entity.AdministradorCargo;
 
 public class BancoProdutos {
 	private int quantidade;
-	private long idAtual = 1;
+	private static long idAtual = 1;
 	// array para armazenar os produtos
 	private ArrayList<Produto> produtos;
 	
@@ -80,18 +83,51 @@ public class BancoProdutos {
 		return false;
 	}
 	
-	public boolean editarProduto(long buscarId,Produto produtoAtual, Object user) {
+	public boolean editar(ProdutoAtributos atributo, Produto produto, Object valor, Object user, ArrayList<Administrador> banco) {
 		if(permissaoProduto(user)) {
-			for(Produto produto:produtos) {
-				if(produto.getId() == buscarId) {
-					produto.setNome(produtoAtual.getNome());
-					produto.setDescricao(produtoAtual.getDescricao());
-					produto.setQuantidade(produtoAtual.getQuantidade());
-					produto.setValorProduto(produtoAtual.getValorProduto());
-					return true;
+			if(banco.contains(user)) {
+				
+				System.out.println("Aqui");
+				
+				switch(atributo) {
+				
+				case nome:
+					produto.setNome((String) valor);
+					break;
+				case descricao:
+					produto.setDescricao((String) valor);
+					break;
+				
+				case quantidade:
+					produto.setQuantidade((int) valor);
+					break;
+				
+				case valorProduto:
+					produto.setValorProduto((double) valor);
+					break;
+				
+				default:
+					System.err.println("Passe um Atributo válido");
 				}
+				
+				try {
+					
+					System.out.println(produto.toString());
+					
+					System.out.println("AAAAAAAAAIn");
+					produtos.set(produtos.indexOf(produto), produto);
+					BancoProdutosDAO.editar(atributo, (String) valor, produto.getId());
+					
+					System.out.println("Produto editado com sucesso!");
+					
+				} catch(IndexOutOfBoundsException e) {
+					System.err.println("Produto inválido");
+				}
+				
+				return true;
 			}
 		}
+		
 		return false;
 	}
 	
@@ -134,7 +170,14 @@ public class BancoProdutos {
 	}
 	
 	public static ArrayList<Produto> carregar(){
-		return BancoProdutosDAO.carregar();
+		ArrayList<Produto> produtos = BancoProdutosDAO.carregar();
+		
+		if(produtos.size() > 0) {
+			//faz o idAtual ser = ao maior +1
+			idAtual = produtos.get(0).getId() + 1;
+		}
+		
+		return produtos;
 	}
 	
 }

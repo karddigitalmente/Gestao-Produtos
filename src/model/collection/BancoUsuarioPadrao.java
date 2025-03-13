@@ -2,17 +2,20 @@ package model.collection;
 
 import java.util.ArrayList;
 
+import dao.AdministradorDAO;
 import dao.UsuarioDAO;
 import model.entity.Administrador;
+import model.entity.AdministradorAtributos;
 import model.entity.AdministradorCargo;
 import model.entity.Usuario;
+import model.entity.UsuarioAtributos;
 
 public class BancoUsuarioPadrao {
 	
 	private int quantidade;
 	
 	// id gerenciado pelo programa
-	private long idAtual = 1;
+	private static long idAtual = 1;
 	private ArrayList<Usuario> usuarios;
 	
 	public BancoUsuarioPadrao() {
@@ -37,18 +40,60 @@ public class BancoUsuarioPadrao {
 		return false;
 	}
 	
-	public boolean editarUsuario(long buscarId, Usuario usuarioAtual, Object user) {
+	// nome, descricao, cpf, senha, salario, vendasTotais, comissao, turno, taxaVenda
+	
+	public boolean editar(UsuarioAtributos atributo, Usuario usuario, Object valor, Object user, ArrayList<Usuario> banco) {
 		if(permissaoUsuario(user)) {
-			for(Usuario usuario:usuarios) {
-				if(usuario.getId() == buscarId) {
-					usuario.setNome(usuarioAtual.getNome());
-					usuario.setCpf(usuarioAtual.getCpf());
-					usuario.setSenha(usuarioAtual.getSenha());
-					usuario.setTurno(usuarioAtual.getTurno());
-					usuario.setSalario(usuarioAtual.getSalario());
-					usuario.setTaxaVenda(usuarioAtual.getTaxaVenda());
+			
+			if(banco.contains(user)) {
+				System.out.println("aqui");
+				
+				switch(atributo) {
+				
+				case nome:
+					usuario.setNome((String) valor);
+					break;
+				case cpf:
+					usuario.setCpf((String) valor);
+					break;
+				
+				case senha:
+					usuario.setSenha((String) valor);
+					break;
+				
+				case salario:
+					usuario.setSalario((double) valor);
+					break;
+					
+				case vendasTotais:
+					usuario.setVendasTotais((int) valor);
+					break;
+					
+				case comissao:
+					usuario.setComissao((double) valor);
+					break;
+					
+				case taxaVenda:
+					usuario.setTaxaVenda((float) valor);
+					break;
+				
+				default:
+					System.err.println("Passe um Atributo válido");
+				
+				//Troca os administradores
+			}
+				try {
+					usuarios.set(usuarios.indexOf(usuario), usuario);
+					UsuarioDAO.editar(atributo, (String) valor, usuario.getId());
+					
 					return true;
+					
+				} catch(IndexOutOfBoundsException e) {
+					System.err.println("Administrador inválido");
 				}
+			
+			return false;
+			
 			}
 		}
 		
@@ -128,8 +173,15 @@ public class BancoUsuarioPadrao {
 		
 	}
 	
-	public static ArrayList<Usuario> carregar() {
-		return UsuarioDAO.carregar();
+	public static ArrayList<Usuario> carregar(){
+		ArrayList<Usuario> usuarios = UsuarioDAO.carregar();
+		
+		if(usuarios.size() > 0) {
+			//faz o idAtual ser = ao maior +1
+			idAtual = usuarios.get(0).getId() + 1;
+		}
+		
+		return usuarios;
 	}
 	
 }

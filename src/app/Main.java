@@ -11,8 +11,10 @@ import model.entity.Administrador;
 import model.entity.AdministradorAtributos;
 import model.entity.AdministradorCargo;
 import model.entity.Produto;
+import model.entity.ProdutoAtributos;
 import model.entity.Turno;
 import model.entity.Usuario;
+import model.entity.UsuarioAtributos;
 
 public class Main {
 	
@@ -28,14 +30,16 @@ public class Main {
 	static Administrador padrao = new Administrador("padrao","00000000000","system", AdministradorCargo.GERENTE);
 	
 	public static void main(String[] args) {
+		// Se remover isso daqui da merda (ele faz com que o id do padrão seja 1, se não for n da pra add nada)
+		padrao.setId(1);
 		
 		// garantir a pessoa criar a primeira conta(adm)
-		if(bancoAdm.getAdminsitradores().size() == 0) {
+		if(bancoAdm.getAdministradores().size() == 0) {
 			System.out.print("Você não possui uma conta administrador, vamos criar!!\n");
 			criarAdm();
-			telaAdm();
+			//telaAdm();
 		}	
-			
+		
 		System.out.println("!!Bem vindo!!");
 		System.out.print("1- Login\n");
 		int escolha = sc.nextInt();
@@ -53,7 +57,7 @@ public class Main {
 			
 			switch(cargo) {
 				case 1:
-					telaAdm();
+					//telaAdm();
 					break;
 				case 2:
 					
@@ -106,7 +110,8 @@ public class Main {
 				
 				produto = new Produto(nome,descricao,quantidade,valor);
 				
-				if(bancoProduto.editarProduto(id, produto, us)) {
+				
+				if(bancoProduto.editarProduto(, produto, us, bancoAdm.getAdministradores())) {
 					System.out.print("Informações alteradas com sucesso!!");
 				}
 				else {
@@ -263,6 +268,65 @@ public class Main {
 	}
 	
 	// metodos vendedor
+	
+	// metodos produto
+	
+	static void editarProduto() {
+		System.out.print("Informe o id do produto a ser editado: ");
+		long id = sc.nextLong();
+		sc.nextLine();
+		
+		// Não tava achando onde tu fez o outro buscarId ent precisa só refazer
+		produto = bancoProduto.buscarId(id);
+		if(produto == null) {
+			System.out.print("Produto não encontrado.");
+			return;
+		}
+		
+		System.out.print("Informe o que você quer editar:\n ");
+		System.out.print("1- Nome"
+					+ "\n2- Descrição"
+					+ "\n3- Quantidade"
+					+ "\n4- Valor");
+		int escolha = sc.nextInt();
+		sc.nextLine();
+		
+		ProdutoAtributos atributo;
+		Object valorEditado;
+		
+		switch(escolha) {
+			case 1:
+				atributo = ProdutoAtributos.nome;
+				System.out.print("Informe o novo nome: ");
+				valorEditado = sc.nextLine();
+				break;
+				
+			case 2:
+				atributo = ProdutoAtributos.descricao;
+				System.out.print("informe a nova descrição: ");
+				valorEditado = sc.nextLine();
+				break;
+				
+			case 3:
+				atributo = ProdutoAtributos.quantidade;
+				System.out.print("Informe a nova quantidade: ");
+				valorEditado = sc.nextLine();
+				break;
+				
+			case 4: 
+				atributo = ProdutoAtributos.valorProduto;
+				System.out.print("Informe o novo valor:");
+				valorEditado = sc.nextDouble();
+				break;
+		}
+		
+		if(bancoProduto.editar(atributo, produto, valorEditado, adm, bancoAdm.getAdministradores())) {
+			System.out.print("Produto editado!");
+		} else {
+			System.out.print("Erro ao editar produto");
+		}
+	}
+	
 	// metodos user
 	
 	static void criarUser() {
@@ -349,7 +413,7 @@ public class Main {
 		float taxaVenda = sc.nextFloat();
 		
 		Usuario usuarioEditado = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
-		if(bancoUser.editarUsuario(id, usuarioEditado, adm)) {
+		if(bancoUser.editarUsuario(id, usuarioEditado, adm, bancoAdm.getAdministradores())) {
 			System.out.print("Usuário editado!");
 		} else {
 			System.out.print("Erro ao editar o usuário.");

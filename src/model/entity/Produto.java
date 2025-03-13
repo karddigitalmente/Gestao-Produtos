@@ -68,4 +68,18 @@ public class Produto {
 	public void setValorProduto(double valorProduto) {
 		this.valorProduto = valorProduto;
 	}
+	
+	@Override
+	public boolean equals(Object produto) {
+		
+		if(produto instanceof Produto) {
+			Produto produtoTemp = (Produto) produto;
+			
+			if(produtoTemp.getId() == id) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

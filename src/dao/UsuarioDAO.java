@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.entity.AdministradorAtributos;
 import model.entity.Turno;
 import model.entity.Usuario;
+import model.entity.UsuarioAtributos;
 import util.ConexaoBanco;
 
 public class UsuarioDAO {
@@ -84,7 +86,7 @@ public class UsuarioDAO {
 	
 	public static ArrayList<Usuario> carregar() {
 		ArrayList<Usuario> usuarios = new ArrayList<>();
-		String query = "SELECT * FROM Usuario";
+		String query = "SELECT * FROM Usuario ORDER BY id DESC";
 		
 	try(Connection conn = ConexaoBanco.getConnection();
 		PreparedStatement statement = conn.prepareStatement(query)){
@@ -117,6 +119,29 @@ public class UsuarioDAO {
 		
 	}catch(SQLException e) {
 		throw new RuntimeException("Erro ao carregar usuários" + e.getMessage());
+		}
+	}
+	
+	public static void editar(UsuarioAtributos atributo, String valor, long id) {
+		
+		String query = "UPDATE Usuario SET " + atributo + " = ?" + " WHERE  id " + "= ?";
+		
+		try(Connection conn = ConexaoBanco.getConnection();
+			PreparedStatement statement = conn.prepareStatement(query)) {
+			
+			statement.setString(1, valor);
+			statement.setLong(2,id);
+			
+			int linhasAfetadas = statement.executeUpdate();
+			
+			if(linhasAfetadas == 0) {
+				System.err.println("Não foi possível alterar os dados!");
+			} else {
+				System.out.println("Usuário alterado!");
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Erro ao editar o usuario: " + e.getMessage());
 		}
 	}
 	
