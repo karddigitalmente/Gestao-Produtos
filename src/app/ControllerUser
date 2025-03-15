@@ -1,0 +1,152 @@
+package app;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import model.collection.BancoUsuarioPadrao;
+import model.entity.Administrador;
+import model.entity.AdministradorCargo;
+import model.entity.Turno;
+import model.entity.Usuario;
+import model.entity.UsuarioAtributos;
+
+public class ControllerUser {
+	static Scanner sc = new Scanner(System.in);
+	static Administrador padrao = new Administrador("padrao","00000000000","system", AdministradorCargo.GERENTE);
+	static BancoUsuarioPadrao bancoUser = new BancoUsuarioPadrao();
+	static ArrayList<Usuario> usuarios;
+	static Usuario user;
+	static Administrador adm;
+	
+	static void criarUser() {
+		String nome, cpf, senha;
+		double salario;
+		Turno turno;
+		float taxaVenda;
+		
+		System.out.print("Informe o nome: ");
+		nome = sc.nextLine();
+		System.out.print("Informe o cpf: ");
+		cpf = sc.nextLine();
+		System.out.print("Informe a senha: ");
+		senha = sc.nextLine();
+		System.out.print("Informe o turno: "
+				+ "\n1- Manhã"
+				+ "\n2- Tarde"
+				+ "\n3- Noite");
+		
+			int escolha = sc.nextInt();
+			switch(escolha) {
+			case 1:
+				turno = Turno.MANHA;
+				break;
+			case 2:
+				turno = Turno.TARDE;
+				break;
+			case 3:
+				turno = Turno.NOITE;
+				break;
+			default:
+				System.out.println("Turno inválido.");
+				return;
+			}
+			
+		System.out.print("Informe o salario: ");
+		salario = sc.nextDouble();
+		System.out.println("Informe a taxa de venda: ");
+		taxaVenda = sc.nextFloat();
+		
+		user = new Usuario(nome, cpf, senha, turno, salario, taxaVenda);
+		if(bancoUser.adicionar(user, padrao)) {
+			System.out.print("Conta criada com sucesso!");
+		} else {
+			System.out.print("Erro ao criar a conta.");
+		 }
+	}
+	
+	static void editarUser() {
+		System.out.print("Informe o id do usuário a ser editado: ");
+		long id = sc.nextLong();
+		sc.nextLine();
+		
+		user = bancoUser.buscarId(id);
+		if(user == null) {
+			System.out.print("Adm não encontrado.");
+			return;
+		}
+		
+		System.out.print("Informe o que você quer editar:\n ");
+		System.out.print("1- Nome"
+					+ "\n2- Cpf"
+					+ "\n3- Senha"
+					+ "\n4- Turno"
+					+ "\n5- Salario"
+					+ "\n5 - Taxa de Venda");
+		int escolha = sc.nextInt();
+		sc.nextLine();
+		
+		UsuarioAtributos atributo;
+		Object valorEditado;
+		
+		switch(escolha) {
+		case 1:
+			atributo = UsuarioAtributos.nome;
+			System.out.print("Informe o novo nome: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 2:
+			atributo = UsuarioAtributos.cpf;
+			System.out.print("informe o novo cpf: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 3:
+			atributo = UsuarioAtributos.senha;
+			System.out.print("Informe a nova senha: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 4: 
+			atributo = UsuarioAtributos.turno;
+			System.out.print("Informe o novo turno:"
+					+ "\n1- Manhã"
+					+ "\n2- Tarde"
+					+ "\n3- Noite");
+			int escolhaCargo = sc.nextInt();
+			sc.nextLine();
+				switch(escolhaCargo) {
+				case 1:
+					valorEditado = Turno.MANHA;
+					break;
+				case 2:
+					valorEditado = Turno.TARDE;
+					break;
+				case 3:
+					valorEditado = Turno.NOITE;
+					break;
+				default:
+					System.out.print("Turno Inválido.");
+					return;
+				}
+				break;
+		case 5:
+			atributo = UsuarioAtributos.salario;
+			System.out.print("Informe o novo salário: ");
+			valorEditado = sc.nextLine();
+			break;
+		case 6:
+			atributo = UsuarioAtributos.taxaVenda;
+			System.out.print("Informe a nova Taxa de Venda: ");
+			valorEditado = sc.nextLine();
+			break;
+		default:
+			System.out.print("Opção escolhida inválida!");
+			return;
+		}
+		
+		// precisa de um adm para verificar
+		if(bancoUser.editar(atributo, user, valorEditado, adm, usuarios)) {
+			System.out.print("Adm editado!");
+		} else {
+			System.out.print("Erro ao editar usuário");
+		}	
+	}
+}
