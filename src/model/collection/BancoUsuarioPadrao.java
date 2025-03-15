@@ -2,10 +2,8 @@ package model.collection;
 
 import java.util.ArrayList;
 
-import dao.AdministradorDAO;
 import dao.UsuarioDAO;
 import model.entity.Administrador;
-import model.entity.AdministradorAtributos;
 import model.entity.AdministradorCargo;
 import model.entity.Usuario;
 import model.entity.UsuarioAtributos;
@@ -40,7 +38,14 @@ public class BancoUsuarioPadrao {
 		return false;
 	}
 	
-	// nome, descricao, cpf, senha, salario, vendasTotais, comissao, turno, taxaVenda
+	public Usuario buscarId(long id) {
+		for(Usuario user: usuarios) {
+			if(user.getId() == id) {
+				return user;
+			}
+		}
+		return null;
+	}
 	
 	public boolean editar(UsuarioAtributos atributo, Usuario usuario, Object valor, Object user, ArrayList<Usuario> banco) {
 		if(permissaoUsuario(user)) {
